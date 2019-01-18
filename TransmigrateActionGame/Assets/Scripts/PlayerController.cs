@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float playerSpeed;
+    private float playerRadius = 1f;
 
     Rigidbody2D playerRigid;
 	void Start () {
@@ -31,11 +32,25 @@ public class PlayerController : MonoBehaviour {
 
     private void MoveUp()
     {
-        playerRigid.MovePosition(playerRigid.position + Vector2.up * playerSpeed);
+        Vector2 newPos = playerRigid.position + Vector2.up * playerSpeed;
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+
+        // 画面外には出ないようにする
+        newPos.y = Mathf.Clamp(newPos.y, min.y, max.y - playerRadius);
+
+        playerRigid.MovePosition(newPos);
     }
 
     private void MoveDown()
     {
-        playerRigid.MovePosition(playerRigid.position + Vector2.down * playerSpeed);
+        Vector2 newPos = playerRigid.position + Vector2.down * playerSpeed;
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+
+        // 画面外には出ないようにする
+        newPos.y = Mathf.Clamp(newPos.y, min.y + playerRadius, max.y);
+
+        playerRigid.MovePosition(newPos);
     }
 }
