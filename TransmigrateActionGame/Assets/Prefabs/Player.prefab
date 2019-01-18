@@ -90,6 +90,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 0.2
+  playerScaleOffset: 0.06
+  playerMinScale: 0.4
+  fluctuationSpeed: 0.1
 --- !u!212 &212313611835410716
 SpriteRenderer:
   m_ObjectHideFlags: 1

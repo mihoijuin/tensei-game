@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    // 移動用
     public float playerSpeed;
-    private float playerRadius = 1f;
+    private readonly float playerRadius = 1f;
+
+    // 揺らぎ
+    public float playerScaleOffset;
+    public float playerMinScale;
+    float scaleCount;
+    public float fluctuationSpeed;
+
 
     Rigidbody2D playerRigid;
 	void Start () {
@@ -14,6 +22,11 @@ public class PlayerController : MonoBehaviour {
 	
 	
 	void Update () {
+        // 炎ぽい動きをつける
+        scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
+        transform.localScale = new Vector3(scaleCount, scaleCount, 1);
+
+        // 移動
         if (Input.GetMouseButton(0))
         {
             Vector3 inputPos = Input.mousePosition;
