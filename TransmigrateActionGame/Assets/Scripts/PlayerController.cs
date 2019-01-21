@@ -73,4 +73,22 @@ public class PlayerController : MonoBehaviour {
 
         playerRigid.MovePosition(newPos);
     }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (collision.tag)
+        {
+            case "GoodItem":
+                Debug.Log("good");
+                break;
+            case "BadItem":
+                Debug.Log("bad");
+                break;
+            default:
+                Debug.Log("unknown");
+                break;
+       }
+
+    }
 }
