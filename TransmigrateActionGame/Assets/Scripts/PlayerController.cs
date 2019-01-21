@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     // 移動用
-    public float playerSpeed;
-    private readonly float playerRadius = 1f;
+    public float updownSpeed;
+    public float slideSpeed;
+    private readonly float playerRadius = 0.8f;
 
     // 揺らぎ
     public float playerScaleOffset;
@@ -26,7 +27,13 @@ public class PlayerController : MonoBehaviour {
         scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
         transform.localScale = new Vector3(scaleCount, scaleCount, 1);
 
+
         // 移動
+        // TODO ステージ中のみに限定する
+        // 右に徐々に動く
+        playerRigid.velocity = Vector2.right * slideSpeed;
+
+        // 上下移動
         if (Input.GetMouseButton(0))
         {
             Vector3 inputPos = Input.mousePosition;
@@ -45,7 +52,7 @@ public class PlayerController : MonoBehaviour {
 
     private void MoveUp()
     {
-        Vector2 newPos = playerRigid.position + Vector2.up * playerSpeed;
+        Vector2 newPos = playerRigid.position + Vector2.up * updownSpeed;
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
@@ -57,7 +64,7 @@ public class PlayerController : MonoBehaviour {
 
     private void MoveDown()
     {
-        Vector2 newPos = playerRigid.position + Vector2.down * playerSpeed;
+        Vector2 newPos = playerRigid.position + Vector2.down * updownSpeed;
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
