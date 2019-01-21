@@ -31,7 +31,6 @@ public class LifeDirector : MonoBehaviour {
         
         GameObject targetLife;
         lifePoint -= damagePoint;
-        Debug.Log(lifePoint);
 
         // ライフの状態によって減らす対象のハートオブジェクトを変える
         if (lifePoint >= 2f)

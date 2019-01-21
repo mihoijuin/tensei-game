@@ -32,10 +32,12 @@ public class EnemyController : MonoBehaviour {
 
     private void FixedUpdate()
     {
-      
+        
     }
 
-    IEnumerator SwitchDirectionPattern1()
+    // TODO コルーチンでなくUpdate()内で動かせたら理想
+    // TODO プレイヤーがゴールについたら動きを停止させたい
+    public IEnumerator SwitchDirectionPattern1()
     {
         // 上→下→右→左
         while (true)

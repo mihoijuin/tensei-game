@@ -16,27 +16,44 @@ public class PlayerController : MonoBehaviour {
     public float fluctuationSpeed;
 
 
-    public ItemDirector itemDirector;
+    public float goalSpeed;
+    private bool isInStage;
+
+
+    ItemDirector itemDirector;
+    StageDirector stageDirector;
 
     Rigidbody2D playerRigid;
+
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
+        itemDirector = FindObjectOfType<ItemDirector>();
+        stageDirector = FindObjectOfType<StageDirector>();
+
+        // TODO 最終的にはゲーム部分に突入したらONにする
+        isInStage = true;
 	}
 	
 	
 	void Update () {
-        // 炎ぽい動きをつける
-        scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
-        transform.localScale = new Vector3(scaleCount, scaleCount, 1);
 
+        // 基本動作
+        if (isInStage)
+        {
+            // 炎のようにゆらゆら
+            scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
+            transform.localScale = new Vector3(scaleCount, scaleCount, 1);
 
-        // 移動
-        // TODO ステージ中のみに限定する
-        // 右に徐々に動く
-        playerRigid.velocity = Vector2.right * slideSpeed;
+            // 徐々に右に動く
+            playerRigid.velocity = Vector2.right * slideSpeed;
+        }
+        else
+        {
+            playerRigid.velocity = Vector2.zero;
+        }
 
         // 上下移動
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && isInStage)
         {
             Vector3 inputPos = Input.mousePosition;
             Vector3 screenCenterPos = Camera.main.ViewportToScreenPoint(new Vector2(0, 0.5f));
@@ -89,10 +106,39 @@ public class PlayerController : MonoBehaviour {
                 itemDirector.CountUpBadPoint();
                 Destroy(collision.gameObject);
                 break;
+            case "Switch":
+                StartCoroutine(Goal(collision.gameObject));
+                break;
             default:
                 Debug.Log("unknown collider");
                 break;
        }
 
+    }
+
+    IEnumerator Goal(GameObject goalSwitch)
+    {
+
+        isInStage = false;
+
+        float targetPosX;
+        float targetPosY;
+
+        yield return new WaitForSeconds(0.5f);
+
+        while ((goalSwitch.transform.position - transform.position).magnitude > 0.01f)
+        {
+
+            targetPosX = Mathf.SmoothStep(transform.position.x, goalSwitch.transform.position.x, goalSpeed);
+            targetPosY = Mathf.SmoothStep(transform.position.y, goalSwitch.transform.position.y, goalSpeed);
+
+            transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
+
+        yield break;
     }
 }
