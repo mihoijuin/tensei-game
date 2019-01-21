@@ -12,11 +12,16 @@ public class EnemyController : MonoBehaviour {
 
     RaycastHit2D hit;
 
+    LifeDirector lifeDirector;
+
 
     void Start ()
     {
+        lifeDirector = FindObjectOfType<LifeDirector>();
+
         originScale = transform.localScale;
         upDirection = new Vector3(originScale.x, -originScale.y, originScale.z);
+
         switch (enemyPattern)
         {
             case 1:
@@ -57,7 +62,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            Debug.Log("hit");
+            lifeDirector.DamageLifePoint();
         }
         transform.localScale = upDirection;
     }
@@ -68,7 +73,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            Debug.Log("hit");
+            lifeDirector.DamageLifePoint();
         }
         transform.localScale = originScale;
     }
@@ -79,7 +84,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            Debug.Log("hit");
+            lifeDirector.DamageLifePoint();
         }
         Debug.Log("右");
     }
@@ -90,7 +95,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            Debug.Log("hit");
+            lifeDirector.DamageLifePoint();
         }
 
         Debug.Log("左");
