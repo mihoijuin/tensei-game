@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour {
     public float fluctuationSpeed;
 
 
+    public ItemDirector itemDirector;
+
     Rigidbody2D playerRigid;
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
@@ -80,13 +82,15 @@ public class PlayerController : MonoBehaviour {
         switch (collision.tag)
         {
             case "GoodItem":
-                Debug.Log("good");
+                itemDirector.CountUpGoodPoint();
+                Destroy(collision.gameObject);
                 break;
             case "BadItem":
-                Debug.Log("bad");
+                itemDirector.CountUpBadPoint();
+                Destroy(collision.gameObject);
                 break;
             default:
-                Debug.Log("unknown");
+                Debug.Log("unknown collider");
                 break;
        }
 
