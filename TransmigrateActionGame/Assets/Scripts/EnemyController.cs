@@ -13,11 +13,13 @@ public class EnemyController : MonoBehaviour {
     RaycastHit2D hit;
 
     LifeDirector lifeDirector;
+    PlayerController playerController;
 
 
     void Start ()
     {
         lifeDirector = FindObjectOfType<LifeDirector>();
+        playerController = FindObjectOfType<PlayerController>();
 
         originScale = transform.localScale;
         upDirection = new Vector3(originScale.x, -originScale.y, originScale.z);
@@ -30,9 +32,10 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        
+        // Update内でステージ状況監視する以外思いつかなかった...
+        if (!playerController.isInStage) { StopAllCoroutines(); }
     }
 
     // TODO コルーチンでなくUpdate()内で動かせたら理想

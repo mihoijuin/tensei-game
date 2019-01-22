@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 
 
     public float goalSpeed;
-    private bool isInStage;
+    public bool isInStage;
 
 
     ItemDirector itemDirector;
