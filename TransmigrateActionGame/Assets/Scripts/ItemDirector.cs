@@ -24,14 +24,10 @@ public class ItemDirector : MonoBehaviour {
     public POINTSTATE pointState;
 
 
-    void Start () {
+    void Start()
+    {
         // 初期化
         InitPoint();
-	}
-
-    private void Update()
-    {        
-        
     }
 
     public void SwitchState()
