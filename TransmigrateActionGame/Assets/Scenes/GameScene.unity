@@ -1710,6 +1710,26 @@ Prefab:
       propertyPath: badMeter
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114548827560795194, guid: 4079d5ec619b6438da654d65c5cd169a,
+        type: 2}
+      propertyPath: initialPoint
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114548827560795194, guid: 4079d5ec619b6438da654d65c5cd169a,
+        type: 2}
+      propertyPath: upPoint
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114548827560795194, guid: 4079d5ec619b6438da654d65c5cd169a,
+        type: 2}
+      propertyPath: downPoint
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114548827560795194, guid: 4079d5ec619b6438da654d65c5cd169a,
+        type: 2}
+      propertyPath: changeAmount
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4079d5ec619b6438da654d65c5cd169a, type: 2}
   m_IsPrefabAsset: 0

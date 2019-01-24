@@ -67,6 +67,9 @@ public class PlayerController : MonoBehaviour {
                 MoveDown();
             }
         }
+
+        // 色の変化
+
     }
 
     private void MoveUp()
@@ -100,10 +103,12 @@ public class PlayerController : MonoBehaviour {
         {
             case "GoodItem":
                 itemDirector.CountUpPoint();
+                itemDirector.SwitchState();
                 Destroy(collision.gameObject);
                 break;
             case "BadItem":
                 itemDirector.CountDownPoint();
+                itemDirector.SwitchState();
                 Destroy(collision.gameObject);
                 break;
             case "Switch":

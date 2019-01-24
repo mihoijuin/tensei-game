@@ -10,15 +10,43 @@ public class ItemDirector : MonoBehaviour {
 
     public int changeAmount; 
 
+    int thresholdPoint;
 
-	void Start () {
+    public enum POINTSTATE
+    {
+        NORMAL = 0,
+        GOOD,
+        BAD,
+
+        NUM
+    }
+
+    public POINTSTATE pointState;
+
+
+    void Start () {
         // 初期化
         InitPoint();
 	}
 
+    private void Update()
+    {        
+        
+    }
+
+    public void SwitchState()
+    {
+        if(currentPoint <= -thresholdPoint) { pointState = POINTSTATE.BAD; }
+        else if(currentPoint >= thresholdPoint) { pointState = POINTSTATE.GOOD; }
+        else { pointState = POINTSTATE.NORMAL; }
+    }
+
+
     void InitPoint()
     {
         currentPoint = initialPoint;
+        thresholdPoint = changeAmount * 2;
+        pointState = POINTSTATE.NORMAL;
     }
 
     public void CountUpPoint()
