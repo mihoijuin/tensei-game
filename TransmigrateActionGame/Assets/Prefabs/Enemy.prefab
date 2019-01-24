@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPattern: 1
+  switchSpeed: 2
 --- !u!212 &212642620676037682
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -16,6 +16,11 @@ public class PlayerController : MonoBehaviour {
     public float fluctuationSpeed;
 
 
+    // 色変化
+    [SerializeField]
+    private float colorChangeAmount;
+
+    // ゴール判定
     public float goalSpeed;
     public bool isInStage;
 
@@ -24,11 +29,13 @@ public class PlayerController : MonoBehaviour {
     StageDirector stageDirector;
 
     Rigidbody2D playerRigid;
+    Renderer playerRenderer;
 
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
         itemDirector = FindObjectOfType<ItemDirector>();
         stageDirector = FindObjectOfType<StageDirector>();
+        playerRenderer = GetComponent<Renderer>();
 
         // TODO 最終的にはゲーム部分に突入したらONにする
         isInStage = true;
@@ -66,7 +73,8 @@ public class PlayerController : MonoBehaviour {
             {
                 MoveDown();
             }
-        }
+        }              
+
     }
 
     private void MoveUp()
@@ -96,14 +104,22 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Color currentColor = playerRenderer.material.color;
+
         switch (collision.tag)
         {
             case "GoodItem":
-                itemDirector.CountUpGoodPoint();
+                itemDirector.CountUpPoint();
+                itemDirector.SwitchState();
+                // 色を変更
+                playerRenderer.material.color = new Color(currentColor.r, currentColor.g + colorChangeAmount, currentColor.b + colorChangeAmount);
                 Destroy(collision.gameObject);
                 break;
             case "BadItem":
-                itemDirector.CountUpBadPoint();
+                itemDirector.CountDownPoint();
+                itemDirector.SwitchState();
+                // 色を変更
+                playerRenderer.material.color = new Color(currentColor.r, currentColor.g - colorChangeAmount, currentColor.b - colorChangeAmount);
                 Destroy(collision.gameObject);
                 break;
             case "Switch":
@@ -115,6 +131,7 @@ public class PlayerController : MonoBehaviour {
        }
 
     }
+        
 
     IEnumerator Goal(GameObject goalSwitch)
     {

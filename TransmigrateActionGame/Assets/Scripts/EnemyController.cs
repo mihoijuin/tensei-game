@@ -12,13 +12,11 @@ public class EnemyController : MonoBehaviour {
 
     RaycastHit2D hit;
 
-    LifeDirector lifeDirector;
     PlayerController playerController;
 
 
     void Start ()
     {
-        lifeDirector = FindObjectOfType<LifeDirector>();
         playerController = FindObjectOfType<PlayerController>();
 
         originScale = transform.localScale;
@@ -67,7 +65,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            lifeDirector.DamageLifePoint();
+            Debug.Log("game over");
         }
         transform.localScale = upDirection;
     }
@@ -78,7 +76,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            lifeDirector.DamageLifePoint();
+            Debug.Log("game over");
         }
         transform.localScale = originScale;
     }
@@ -89,7 +87,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            lifeDirector.DamageLifePoint();
+            Debug.Log("game over");
         }
         Debug.Log("右");
     }
@@ -100,7 +98,7 @@ public class EnemyController : MonoBehaviour {
 
         if (hit && hit.collider.CompareTag("Player"))
         {
-            lifeDirector.DamageLifePoint();
+            Debug.Log("game over");
         }
 
         Debug.Log("左");

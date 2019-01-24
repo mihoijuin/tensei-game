@@ -1,41 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemDirector : MonoBehaviour {
 
-    float goodPoint;
-    float badPoint;
+    public int currentPoint;
 
-    public float upSpeed;
+    public int initialPoint;
 
+    public int changeAmount; 
 
-    public Image goodMeter;
-    public Image badMeter;
+    int thresholdPoint;
 
-	void Start () {
-        // 初期化
-        goodPoint = 0f;
-        badPoint = 0f;
-	}
-	
-	
-	void Update () {
-		
-	}
-
-    // カウントアップ
-    public void CountUpGoodPoint()
+    public enum POINTSTATE
     {
-        goodPoint += upSpeed;
-        goodMeter.fillAmount += upSpeed;    // goodPointをそのまま入れるのではなく差分を足していくことで後にアニメーションで書き直しやすい気がする
+        NORMAL = 0,
+        GOOD,
+        BAD,
+
+        NUM
+    }
+
+    public POINTSTATE pointState;
+
+
+    void Start()
+    {
+        // 初期化
+        InitPoint();
+    }
+
+    public void SwitchState()
+    {
+        if(currentPoint <= -thresholdPoint) { pointState = POINTSTATE.BAD; }
+        else if(currentPoint >= thresholdPoint) { pointState = POINTSTATE.GOOD; }
+        else { pointState = POINTSTATE.NORMAL; }
     }
 
 
-    public void CountUpBadPoint()
+    void InitPoint()
     {
-        badPoint += upSpeed;
-        badMeter.fillAmount += upSpeed;
+        currentPoint = initialPoint;
+        thresholdPoint = changeAmount * 2;
+        pointState = POINTSTATE.NORMAL;
+    }
+
+    public void CountUpPoint()
+    {
+        currentPoint += changeAmount;
+    }
+
+
+    public void CountDownPoint()
+    {
+        currentPoint -= changeAmount;
     }
 }
