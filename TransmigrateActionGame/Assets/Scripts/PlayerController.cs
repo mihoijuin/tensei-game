@@ -99,11 +99,11 @@ public class PlayerController : MonoBehaviour {
         switch (collision.tag)
         {
             case "GoodItem":
-                itemDirector.CountUpGoodPoint();
+                itemDirector.CountUpPoint();
                 Destroy(collision.gameObject);
                 break;
             case "BadItem":
-                itemDirector.CountUpBadPoint();
+                itemDirector.CountDownPoint();
                 Destroy(collision.gameObject);
                 break;
             case "Switch":
