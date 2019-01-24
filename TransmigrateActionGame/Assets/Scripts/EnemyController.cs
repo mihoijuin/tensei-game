@@ -13,11 +13,14 @@ public class EnemyController : MonoBehaviour {
     RaycastHit2D hit;
 
     PlayerController playerController;
+    GameObject player;
 
 
+    // TODO 最終的にはStartではなく、ステージアクティブになったら以下の処理を行う
     void Start ()
     {
         playerController = FindObjectOfType<PlayerController>();
+        player = GameObject.Find("Player");
 
         originScale = transform.localScale;
         upDirection = new Vector3(originScale.x, -originScale.y, originScale.z);
@@ -32,12 +35,25 @@ public class EnemyController : MonoBehaviour {
 
     private void Update()
     {
+        // ゲームステージ中のみ敵の動きを実行
         // Update内でステージ状況監視する以外思いつかなかった...
         if (!playerController.isInStage) { StopAllCoroutines(); }
+
+
+        // 敵に見つかったらゲームオーバー
+        if (hit && hit.collider.CompareTag("Player") && playerController.isInStage)
+        {
+            Attack();
+        }
+
+        // 敵にぶつかってもゲームオーバー
+        if((player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
+        {
+            Attack();
+        }
     }
 
     // TODO コルーチンでなくUpdate()内で動かせたら理想
-    // TODO プレイヤーがゴールについたら動きを停止させたい
     public IEnumerator SwitchDirectionPattern1()
     {
         // 上→下→右→左
@@ -62,46 +78,30 @@ public class EnemyController : MonoBehaviour {
     void TurnUp()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.up);
-
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
         transform.localScale = upDirection;
     }
 
     void TurnDown()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.down);
-
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
         transform.localScale = originScale;
     }
 
     void TurnRight()
     {
-        hit = Physics2D.Raycast(transform.position, Vector2.right);
-
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
-        Debug.Log("右");
+        hit = Physics2D.Raycast(transform.position, Vector2.right);        
     }
 
     void TurnLeft()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.left);
+    }
 
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
+    void Attack()
+    {
+        playerController.isInStage = false;
+        Debug.Log("game over");
 
-        Debug.Log("左");
     }
 
 }

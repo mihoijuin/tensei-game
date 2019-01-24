@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour {
     // 移動用
     public float updownSpeed;
     public float slideSpeed;
-    private readonly float playerRadius = 0.8f;
+    public float playerRadius = 0.8f;
 
     // 揺らぎ
     public float playerScaleOffset;
