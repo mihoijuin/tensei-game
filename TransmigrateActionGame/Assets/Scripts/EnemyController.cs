@@ -7,20 +7,21 @@ public class EnemyController : MonoBehaviour {
     public int enemyPattern;
     public float switchSpeed;
 
-    Vector3 originScale;
-    Vector3 upDirection;
 
+    Animator enemyAnimator;
     RaycastHit2D hit;
 
     PlayerController playerController;
+    GameObject player;
 
 
+    // TODO 最終的にはStartではなく、ステージアクティブになったら以下の処理を行う
     void Start ()
     {
         playerController = FindObjectOfType<PlayerController>();
+        player = GameObject.Find("Player");
 
-        originScale = transform.localScale;
-        upDirection = new Vector3(originScale.x, -originScale.y, originScale.z);
+        enemyAnimator = GetComponent<Animator>();
 
         switch (enemyPattern)
         {
@@ -32,21 +33,35 @@ public class EnemyController : MonoBehaviour {
 
     private void Update()
     {
+
+        // ゲームステージ中のみ敵の動きを実行
         // Update内でステージ状況監視する以外思いつかなかった...
         if (!playerController.isInStage) { StopAllCoroutines(); }
+
+
+        // 敵に見つかったらゲームオーバー
+        if (hit && hit.collider.CompareTag("Player") && playerController.isInStage)
+        {
+            Attack();
+        }
+
+        // 敵にぶつかってもゲームオーバー
+        if(playerController.isInStage && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
+        {
+            Attack();
+        }
     }
 
     // TODO コルーチンでなくUpdate()内で動かせたら理想
-    // TODO プレイヤーがゴールについたら動きを停止させたい
     public IEnumerator SwitchDirectionPattern1()
     {
         // 上→下→右→左
         while (true)
         {
-            TurnUp();
+            TurnFront();
             yield return new WaitForSeconds(switchSpeed);
 
-            TurnDown();
+            TurnBack();
             yield return new WaitForSeconds(switchSpeed);
 
             TurnRight();
@@ -59,49 +74,44 @@ public class EnemyController : MonoBehaviour {
 
     }
 
-    void TurnUp()
+    void TurnFront()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.up);
-
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
-        transform.localScale = upDirection;
+        Debug.Log("front");
+        enemyAnimator.SetTrigger("TurnFront");
     }
 
-    void TurnDown()
+    void TurnBack()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.down);
-
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
-        transform.localScale = originScale;
+        Debug.Log("back");
+        enemyAnimator.SetTrigger("TurnBack");
     }
 
     void TurnRight()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.right);
-
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
-        Debug.Log("右");
+        Debug.Log("right");
+        enemyAnimator.SetTrigger("TurnRight");
     }
 
     void TurnLeft()
     {
         hit = Physics2D.Raycast(transform.position, Vector2.left);
+        Debug.Log("left");
+        enemyAnimator.SetTrigger("TurnLeft");
+    }
 
-        if (hit && hit.collider.CompareTag("Player"))
-        {
-            Debug.Log("game over");
-        }
+    void Attack()
+    {
+        playerController.isInStage = false;
+        Debug.Log("game over");
 
-        Debug.Log("左");
+    }
+
+    void MovePlayerSide()
+    {
+
     }
 
 }
