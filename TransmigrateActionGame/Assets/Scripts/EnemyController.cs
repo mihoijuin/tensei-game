@@ -76,14 +76,14 @@ public class EnemyController : MonoBehaviour {
 
     void TurnFront()
     {
-        hit = Physics2D.Raycast(transform.position, Vector2.up);
+        hit = Physics2D.Raycast(transform.position, Vector2.down);
         Debug.Log("front");
         enemyAnimator.SetTrigger("TurnFront");
     }
 
     void TurnBack()
     {
-        hit = Physics2D.Raycast(transform.position, Vector2.down);
+        hit = Physics2D.Raycast(transform.position, Vector2.up);
         Debug.Log("back");
         enemyAnimator.SetTrigger("TurnBack");
     }
