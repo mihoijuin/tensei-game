@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class StageDirector : MonoBehaviour {
 
-	
-	void Start () {
-		
-	}
-	
-	
-	void Update () {
-		
-	}
+    public GameObject gameover;
 
     public void DestroyStage(GameObject stage)
     {
         Destroy(stage);
 
+    }
+
+    public void ShowGameOver()
+    {
+        gameover.SetActive(true);
     }
 
 }

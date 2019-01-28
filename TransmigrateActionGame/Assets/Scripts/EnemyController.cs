@@ -16,6 +16,9 @@ public class EnemyController : MonoBehaviour {
     PlayerController playerController;
     GameObject player;
 
+
+    StageDirector stageDirector;
+
     enum DIRECTION
     {
         NONE = -1,
@@ -38,6 +41,8 @@ public class EnemyController : MonoBehaviour {
     {
         playerController = FindObjectOfType<PlayerController>();
         player = GameObject.Find("Player");
+
+        stageDirector = FindObjectOfType<StageDirector>();
 
         enemyAnimator = GetComponent<Animator>();        
 
@@ -84,7 +89,7 @@ public class EnemyController : MonoBehaviour {
         if(playerController.isInStage && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
         {
             playerController.isInStage = false;
-            Attack();
+            StartCoroutine(Attack());
         }
     }
 
@@ -171,20 +176,28 @@ public class EnemyController : MonoBehaviour {
         GetComponent<SpriteRenderer>().enabled = true;
 
         // 攻撃
-        Attack();
+        StartCoroutine(Attack());
 
-        Debug.Log("game over");
         yield break;
 
     }
 
-    void Attack()
+    IEnumerator Attack()
     {
         // TODO 攻撃モーション
 
         // プレイヤー消滅
         StartCoroutine(playerController.Die());
+
+        // 消滅まで待機
+        yield return new WaitUntil(() => !player);
+        yield return new WaitForSeconds(1f);
+
+        // ゲームオーバー表示
+        stageDirector.ShowGameOver();
         Debug.Log("game over");
+
+        // スタート画面へ移動
     }
 
     void MovePlayerSide()
