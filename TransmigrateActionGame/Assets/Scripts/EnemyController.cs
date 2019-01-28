@@ -191,13 +191,10 @@ public class EnemyController : MonoBehaviour {
 
         // 消滅まで待機
         yield return new WaitUntil(() => !player);
-        yield return new WaitForSeconds(1f);
 
-        // ゲームオーバー表示
-        stageDirector.ShowGameOver();
-        Debug.Log("game over");
+        // ゲームオーバー
+        StartCoroutine(stageDirector.GameOver());
 
-        // スタート画面へ移動
     }
 
     void MovePlayerSide()
