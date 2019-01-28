@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour {
 
     // ゴール判定
     public float goalSpeed;
-    public bool isInStage;
 
 
     ItemDirector itemDirector;
@@ -57,8 +56,11 @@ public class PlayerController : MonoBehaviour {
                 transform.localScale = new Vector3(scaleCount, scaleCount, 1);
                 break;
             case StageDirector.STAGESTATE.MOVE:
-                playerRigid.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+                // 移動
                 playerRigid.velocity = Vector2.right * stageMoveSpeed;
+                // 炎のようにゆらゆら
+                scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
+                transform.localScale = new Vector3(scaleCount, scaleCount, 1);
                 break;
             case StageDirector.STAGESTATE.NONE:
                 playerRigid.velocity = Vector2.zero;

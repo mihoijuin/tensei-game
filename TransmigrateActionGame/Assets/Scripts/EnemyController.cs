@@ -37,7 +37,7 @@ public class EnemyController : MonoBehaviour {
     IEnumerator switchCoroutine;
 
     // TODO 最終的にはStartではなく、ステージアクティブになったら以下の処理を行う
-    void Start ()
+    void OnEnable ()
     {
         playerController = FindObjectOfType<PlayerController>();
         player = GameObject.Find("Player");
@@ -87,16 +87,16 @@ public class EnemyController : MonoBehaviour {
         if (stageDirector.stageState != StageDirector.STAGESTATE.INSTAGE) { StopCoroutine(switchCoroutine); }
 
         // 敵に見つかったらゲームオーバー
-        if (hit && hit.collider.CompareTag("Player") && stageDirector.stageState != StageDirector.STAGESTATE.INSTAGE)
+        if (hit && hit.collider.CompareTag("Player") && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
         {
-            playerController.isInStage = false;
+            stageDirector.stageState = StageDirector.STAGESTATE.NONE;
             StartCoroutine(Teleportation());
         }
 
         // 敵にぶつかってもゲームオーバー
-        if(stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
+        if(player && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
         {
-            playerController.isInStage = false;
+            stageDirector.stageState = StageDirector.STAGESTATE.NONE;
             StartCoroutine(Attack());
         }
     }
@@ -220,6 +220,7 @@ public class EnemyController : MonoBehaviour {
         // プレイヤーのそばに移動
         findPos = DetermineFindPos();
         MovePlayerSide();
+        enemyAnimator.SetTrigger("TurnFront");  // 攻撃のときは正面を向く
         yield return new WaitForSeconds(vanishSpeed);
 
         // 現れる
