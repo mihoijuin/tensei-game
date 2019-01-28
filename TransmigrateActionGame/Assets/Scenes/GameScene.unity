@@ -1218,6 +1218,16 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114459206553890318, guid: 72e22acd2050442baa323a6f3cae9f5d,
+        type: 2}
+      propertyPath: flashSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114459206553890318, guid: 72e22acd2050442baa323a6f3cae9f5d,
+        type: 2}
+      propertyPath: flashtimes
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72e22acd2050442baa323a6f3cae9f5d, type: 2}
   m_IsPrefabAsset: 0

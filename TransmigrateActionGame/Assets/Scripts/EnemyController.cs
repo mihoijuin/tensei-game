@@ -76,12 +76,14 @@ public class EnemyController : MonoBehaviour {
         // 敵に見つかったらゲームオーバー
         if (hit && hit.collider.CompareTag("Player") && playerController.isInStage)
         {
+            playerController.isInStage = false;
             StartCoroutine(Teleportation());
         }
 
         // 敵にぶつかってもゲームオーバー
         if(playerController.isInStage && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
         {
+            playerController.isInStage = false;
             Attack();
         }
     }
@@ -154,8 +156,7 @@ public class EnemyController : MonoBehaviour {
     }
 
     IEnumerator Teleportation()
-    {
-        playerController.isInStage = false;
+    {                          
         yield return new WaitForSeconds(attackInterval);
 
         // 消える
@@ -169,6 +170,8 @@ public class EnemyController : MonoBehaviour {
         // 現れる
         GetComponent<SpriteRenderer>().enabled = true;
 
+        // 攻撃
+        Attack();
 
         Debug.Log("game over");
         yield break;
@@ -177,7 +180,10 @@ public class EnemyController : MonoBehaviour {
 
     void Attack()
     {
-        playerController.isInStage = false;
+        // TODO 攻撃モーション
+
+        // プレイヤー消滅
+        StartCoroutine(playerController.Die());
         Debug.Log("game over");
     }
 
