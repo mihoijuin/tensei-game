@@ -28,4 +28,8 @@ public class StageDirector : MonoBehaviour {
         SceneManager.LoadScene("StartScene");
     }
 
+    public void EndGame()
+    {
+        SceneManager.LoadScene("EndScene");
+    }
 }

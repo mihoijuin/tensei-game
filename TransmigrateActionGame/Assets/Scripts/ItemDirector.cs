@@ -21,7 +21,7 @@ public class ItemDirector : MonoBehaviour {
         NUM
     }
 
-    public POINTSTATE pointState;
+    public static POINTSTATE PointState { get; private set; }
 
 
     void Start()
@@ -30,11 +30,12 @@ public class ItemDirector : MonoBehaviour {
         InitPoint();
     }
 
+
     public void SwitchState()
     {
-        if(currentPoint <= -thresholdPoint) { pointState = POINTSTATE.BAD; }
-        else if(currentPoint >= thresholdPoint) { pointState = POINTSTATE.GOOD; }
-        else { pointState = POINTSTATE.NORMAL; }
+        if(currentPoint <= -thresholdPoint) { PointState = POINTSTATE.BAD; }
+        else if(currentPoint >= thresholdPoint) { PointState = POINTSTATE.GOOD; }
+        else { PointState = POINTSTATE.NORMAL; }
     }
 
 
@@ -42,7 +43,7 @@ public class ItemDirector : MonoBehaviour {
     {
         currentPoint = initialPoint;
         thresholdPoint = changeAmount * 2;
-        pointState = POINTSTATE.NORMAL;
+        PointState = POINTSTATE.NORMAL;
     }
 
     public void CountUpPoint()

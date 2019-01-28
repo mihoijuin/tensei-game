@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour {
 
         yield return new WaitForSeconds(0.5f);
 
-        while ((goalSwitch.transform.position - transform.position).magnitude > 0.01f)
+        while ((goalSwitch.transform.position - transform.position).magnitude > 0.05f)
         {
 
             targetPosX = Mathf.SmoothStep(transform.position.x, goalSwitch.transform.position.x, goalSpeed);
@@ -178,6 +178,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
+
+        yield return new WaitForSeconds(0.5f);
+
+        stageDirector.EndGame();
 
         yield break;
     }
