@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float colorChangeAmount;
 
+    // 死ぬ時
+    public float flashSpeed;
+    public float flashtimes;
+
     // ゴール判定
     public float goalSpeed;
     public bool isInStage;
@@ -131,7 +135,26 @@ public class PlayerController : MonoBehaviour {
        }
 
     }
-        
+
+    public IEnumerator Die()
+    {
+        yield return new WaitForSeconds(1f);
+
+        for (int i=0; i<flashtimes; i++)
+        {
+            yield return new WaitForSeconds(flashSpeed);
+            GetComponent<SpriteRenderer>().enabled = false;
+            
+            yield return new WaitForSeconds(flashSpeed);
+            GetComponent<SpriteRenderer>().enabled = true;
+        }
+
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
+
+        yield break;
+    }
+
 
     IEnumerator Goal(GameObject goalSwitch)
     {
