@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     public float slideSpeed;
     public float playerRadius = 0.8f;
 
+    public float stageMoveSpeed;
+
     // 揺らぎ
     public float playerScaleOffset;
     public float playerMinScale;
@@ -32,39 +34,39 @@ public class PlayerController : MonoBehaviour {
     ItemDirector itemDirector;
     StageDirector stageDirector;
 
-    Rigidbody2D playerRigid;
+    public Rigidbody2D playerRigid;
     Renderer playerRenderer;
 
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
         itemDirector = FindObjectOfType<ItemDirector>();
         stageDirector = FindObjectOfType<StageDirector>();
-        playerRenderer = GetComponent<Renderer>();
-
-        // TODO 最終的にはゲーム部分に突入したらONにする
-        isInStage = true;
+        playerRenderer = GetComponent<Renderer>();        
 	}
 	
 	
-	void Update () {
-
+	void FixedUpdate () {
         // 基本動作
-        if (isInStage)
+        switch (stageDirector.stageState)
         {
-            // 炎のようにゆらゆら
-            scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
-            transform.localScale = new Vector3(scaleCount, scaleCount, 1);
-
-            // 徐々に右に動く
-            playerRigid.velocity = Vector2.right * slideSpeed;
-        }
-        else
-        {
-            playerRigid.velocity = Vector2.zero;
+            case StageDirector.STAGESTATE.INSTAGE:
+                // 徐々に右に動く
+                playerRigid.velocity = Vector2.right * slideSpeed;
+                // 炎のようにゆらゆら
+                scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
+                transform.localScale = new Vector3(scaleCount, scaleCount, 1);
+                break;
+            case StageDirector.STAGESTATE.MOVE:
+                playerRigid.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+                playerRigid.velocity = Vector2.right * stageMoveSpeed;
+                break;
+            case StageDirector.STAGESTATE.NONE:
+                playerRigid.velocity = Vector2.zero;
+                break;
         }
 
         // 上下移動
-        if (Input.GetMouseButton(0) && isInStage)
+        if (Input.GetMouseButton(0) && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
         {
             Vector3 inputPos = Input.mousePosition;
             Vector3 screenCenterPos = Camera.main.ViewportToScreenPoint(new Vector2(0, 0.5f));
@@ -127,7 +129,7 @@ public class PlayerController : MonoBehaviour {
                 Destroy(collision.gameObject);
                 break;
             case "Switch":
-                StartCoroutine(Goal(collision.gameObject));
+                StartCoroutine(PushSwitch(collision.gameObject));
                 break;
             default:
                 Debug.Log("unknown collider");
@@ -156,10 +158,10 @@ public class PlayerController : MonoBehaviour {
     }
 
 
-    IEnumerator Goal(GameObject goalSwitch)
+    IEnumerator PushSwitch(GameObject goalSwitch)
     {
 
-        isInStage = false;
+        stageDirector.stageState = StageDirector.STAGESTATE.NONE;
 
         float targetPosX;
         float targetPosY;
@@ -181,7 +183,7 @@ public class PlayerController : MonoBehaviour {
 
         yield return new WaitForSeconds(0.5f);
 
-        stageDirector.EndGame();
+        stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
 
         yield break;
     }

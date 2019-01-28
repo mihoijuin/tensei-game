@@ -7,11 +7,26 @@ public class StageDirector : MonoBehaviour {
 
     public GameObject gameover;
 
+    public enum STAGESTATE
+    {
+        NONE = -1,
+
+        INSTAGE = 0,
+        MOVE
+    }
+
+    public STAGESTATE stageState;
+
+    private void Start()
+    {
+        stageState = STAGESTATE.INSTAGE;
+    }
+
     public void DestroyStage(GameObject stage)
     {
         Destroy(stage);
-
     }
+
 
     public IEnumerator GameOver()
     {

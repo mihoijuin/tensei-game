@@ -84,17 +84,17 @@ public class EnemyController : MonoBehaviour {
     {
         // ゲームステージ中のみ敵の動きを実行
         // Update内でステージ状況監視する以外思いつかなかった...
-        if (!playerController.isInStage) { StopCoroutine(switchCoroutine); }
+        if (stageDirector.stageState != StageDirector.STAGESTATE.INSTAGE) { StopCoroutine(switchCoroutine); }
 
         // 敵に見つかったらゲームオーバー
-        if (hit && hit.collider.CompareTag("Player") && playerController.isInStage)
+        if (hit && hit.collider.CompareTag("Player") && stageDirector.stageState != StageDirector.STAGESTATE.INSTAGE)
         {
             playerController.isInStage = false;
             StartCoroutine(Teleportation());
         }
 
         // 敵にぶつかってもゲームオーバー
-        if(playerController.isInStage && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
+        if(stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
         {
             playerController.isInStage = false;
             StartCoroutine(Attack());
