@@ -8,7 +8,6 @@ public class EnemyController : MonoBehaviour {
     public float switchSpeed;
 
     public float attackInterval;
-    public float vanishSpeed;
 
     Animator enemyAnimator;
     RaycastHit2D hit;
@@ -158,9 +157,7 @@ public class EnemyController : MonoBehaviour {
         playerController.isInStage = false;
         yield return new WaitForSeconds(attackInterval);
 
-        // 一瞬消える
-        yield return new WaitForSeconds(1f);
-        
+        // プレイヤーのそばに移動
         findPos = DetermineFindPos();
         MovePlayerSide();
 
