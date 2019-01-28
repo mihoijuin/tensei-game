@@ -52,6 +52,14 @@ public class EnemyController : MonoBehaviour {
                 switchCoroutine = SwitchDirectionPattern1();
                 StartCoroutine(switchCoroutine);
                 break;
+            case 2:
+                switchCoroutine = SwitchDirectionPattern2();
+                StartCoroutine(switchCoroutine);
+                break;
+            case 3:
+                switchCoroutine = SwitchDirectionPattern2();
+                StartCoroutine(switchCoroutine);
+                break;
         }
     }
 
@@ -130,6 +138,48 @@ public class EnemyController : MonoBehaviour {
             yield return new WaitForSeconds(switchSpeed);
 
             TurnLeft();
+            yield return new WaitForSeconds(switchSpeed);
+
+        }
+
+    }
+
+    public IEnumerator SwitchDirectionPattern2()
+    {
+        // 上→下→右→左
+        while (true)
+        {
+            TurnBack();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnLeft();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnFront();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnRight();
+            yield return new WaitForSeconds(switchSpeed);
+
+        }
+
+    }
+
+    public IEnumerator SwitchDirectionPattern3()
+    {
+        // 上→下→右→左
+        while (true)
+        {
+            TurnLeft();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnFront();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnBack();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnRight();
             yield return new WaitForSeconds(switchSpeed);
 
         }
