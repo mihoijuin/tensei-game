@@ -442,7 +442,7 @@ Prefab:
     - target: {fileID: 114723693776925774, guid: b86d2a52753b74d66a5bdd1414d0f054,
         type: 2}
       propertyPath: vanishSpeed
-      value: 1
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 114723693776925774, guid: b86d2a52753b74d66a5bdd1414d0f054,
         type: 2}
@@ -1213,6 +1213,11 @@ Prefab:
       propertyPath: slideSpeed
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 212313611835410716, guid: 72e22acd2050442baa323a6f3cae9f5d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72e22acd2050442baa323a6f3cae9f5d, type: 2}
   m_IsPrefabAsset: 0
@@ -1371,7 +1376,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1423712100506722, guid: b86d2a52753b74d66a5bdd1414d0f054, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b86d2a52753b74d66a5bdd1414d0f054, type: 2}
@@ -2039,7 +2044,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1423712100506722, guid: b86d2a52753b74d66a5bdd1414d0f054, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b86d2a52753b74d66a5bdd1414d0f054, type: 2}
