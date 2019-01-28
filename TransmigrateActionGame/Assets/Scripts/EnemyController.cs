@@ -69,7 +69,6 @@ public class EnemyController : MonoBehaviour {
         float x = player.transform.position.x - transform.position.x;
         float degree = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
 
-        Debug.Log(degree);
         if (degree > -135f && degree < -45f) { return DIRECTION.FRONT; }
 
         if (degree > -45f && degree < 45f) { return DIRECTION.RIGHT; }

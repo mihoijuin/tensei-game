@@ -11,12 +11,6 @@ public class PlayerController : MonoBehaviour {
 
     public float stageMoveSpeed;
 
-    // 揺らぎ
-    public float playerScaleOffset;
-    public float playerMinScale;
-    float scaleCount;
-    public float fluctuationSpeed;
-
 
     // 色変化
     [SerializeField]
@@ -51,16 +45,10 @@ public class PlayerController : MonoBehaviour {
             case StageDirector.STAGESTATE.INSTAGE:
                 // 徐々に右に動く
                 playerRigid.velocity = Vector2.right * slideSpeed;
-                // 炎のようにゆらゆら
-                scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
-                transform.localScale = new Vector3(scaleCount, scaleCount, 1);
                 break;
             case StageDirector.STAGESTATE.MOVE:
                 // 移動
                 playerRigid.velocity = Vector2.right * stageMoveSpeed;
-                // 炎のようにゆらゆら
-                scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
-                transform.localScale = new Vector3(scaleCount, scaleCount, 1);
                 break;
             case StageDirector.STAGESTATE.NONE:
                 playerRigid.velocity = Vector2.zero;
