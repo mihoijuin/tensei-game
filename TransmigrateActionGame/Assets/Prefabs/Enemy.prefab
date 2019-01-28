@@ -73,6 +73,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPattern: 1
   switchSpeed: 3
+  attackInterval: 1
+  vanishSpeed: 0.3
 --- !u!212 &212642620676037682
 SpriteRenderer:
   m_ObjectHideFlags: 1

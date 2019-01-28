@@ -89,11 +89,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cbe3be8ad8114198a2984d4d7c75cef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updownSpeed: 0.2
-  slideSpeed: 0.2
+  updownSpeed: 0.1
+  slideSpeed: 0.3
+  playerRadius: 0.8
   playerScaleOffset: 0.1
   playerMinScale: 0.9
   fluctuationSpeed: 0.15
+  colorChangeAmount: 0.3
+  flashSpeed: 0.1
+  flashtimes: 3
   goalSpeed: 0.1
   isInStage: 1
 --- !u!212 &212313611835410716
