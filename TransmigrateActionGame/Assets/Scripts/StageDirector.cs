@@ -29,8 +29,6 @@ public class StageDirector : MonoBehaviour {
 
     private void Update()
     {
-        Debug.Log(stageState);
-
         if(player && player.transform.position.x > stage2Checker.transform.position.x && stageState == STAGESTATE.MOVE)
         {
             StartCoroutine(StartStage2());

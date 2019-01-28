@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GoodItem
   - BadItem
+  - Switch
+  - Goal
   layers:
   - Default
   - TransparentFX

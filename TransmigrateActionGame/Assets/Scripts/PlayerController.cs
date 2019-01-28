@@ -133,6 +133,9 @@ public class PlayerController : MonoBehaviour {
             case "Switch":
                 StartCoroutine(PushSwitch(collision.gameObject));
                 break;
+            case "Goal":
+                StartCoroutine(EnterGoal(collision.gameObject));
+                break;
             default:
                 Debug.Log("unknown collider");
                 break;
@@ -188,5 +191,29 @@ public class PlayerController : MonoBehaviour {
         stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
 
         yield break;
+    }
+
+    IEnumerator EnterGoal(GameObject goal)
+    {
+        stageDirector.stageState = StageDirector.STAGESTATE.NONE;
+
+        float targetPosX;
+        float targetPosY;
+
+        yield return new WaitForSeconds(0.5f);
+
+        while ((goal.transform.position - transform.position).magnitude > 0.05f)
+        {
+
+            targetPosX = Mathf.SmoothStep(transform.position.x, goal.transform.position.x, goalSpeed);
+            targetPosY = Mathf.SmoothStep(transform.position.y, goal.transform.position.y, goalSpeed);
+
+            transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        stageDirector.EndGame();
     }
 }
