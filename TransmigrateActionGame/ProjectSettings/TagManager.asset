@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GoodItem
   - BadItem
+  - Switch
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -42,6 +44,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: block
+    uniqueID: 1479905455
+    locked: 0
+  - name: aura
+    uniqueID: 3871030811
     locked: 0
   - name: object
     uniqueID: 3134788445

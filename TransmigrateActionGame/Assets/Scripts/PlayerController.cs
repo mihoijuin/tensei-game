@@ -9,11 +9,7 @@ public class PlayerController : MonoBehaviour {
     public float slideSpeed;
     public float playerRadius = 0.8f;
 
-    // 揺らぎ
-    public float playerScaleOffset;
-    public float playerMinScale;
-    float scaleCount;
-    public float fluctuationSpeed;
+    public float stageMoveSpeed;
 
 
     // 色変化
@@ -26,45 +22,41 @@ public class PlayerController : MonoBehaviour {
 
     // ゴール判定
     public float goalSpeed;
-    public bool isInStage;
 
 
     ItemDirector itemDirector;
     StageDirector stageDirector;
 
-    Rigidbody2D playerRigid;
+    public Rigidbody2D playerRigid;
     Renderer playerRenderer;
 
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
         itemDirector = FindObjectOfType<ItemDirector>();
         stageDirector = FindObjectOfType<StageDirector>();
-        playerRenderer = GetComponent<Renderer>();
-
-        // TODO 最終的にはゲーム部分に突入したらONにする
-        isInStage = true;
+        playerRenderer = GetComponent<Renderer>();        
 	}
 	
 	
-	void Update () {
-
+	void FixedUpdate () {
         // 基本動作
-        if (isInStage)
+        switch (stageDirector.stageState)
         {
-            // 炎のようにゆらゆら
-            scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
-            transform.localScale = new Vector3(scaleCount, scaleCount, 1);
-
-            // 徐々に右に動く
-            playerRigid.velocity = Vector2.right * slideSpeed;
-        }
-        else
-        {
-            playerRigid.velocity = Vector2.zero;
+            case StageDirector.STAGESTATE.INSTAGE:
+                // 徐々に右に動く
+                playerRigid.velocity = Vector2.right * slideSpeed;
+                break;
+            case StageDirector.STAGESTATE.MOVE:
+                // 移動
+                playerRigid.velocity = Vector2.right * stageMoveSpeed;
+                break;
+            case StageDirector.STAGESTATE.NONE:
+                playerRigid.velocity = Vector2.zero;
+                break;
         }
 
         // 上下移動
-        if (Input.GetMouseButton(0) && isInStage)
+        if (Input.GetMouseButton(0) && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
         {
             Vector3 inputPos = Input.mousePosition;
             Vector3 screenCenterPos = Camera.main.ViewportToScreenPoint(new Vector2(0, 0.5f));
@@ -127,7 +119,10 @@ public class PlayerController : MonoBehaviour {
                 Destroy(collision.gameObject);
                 break;
             case "Switch":
-                StartCoroutine(Goal(collision.gameObject));
+                StartCoroutine(PushSwitch(collision.gameObject));
+                break;
+            case "Goal":
+                StartCoroutine(EnterGoal(collision.gameObject));
                 break;
             default:
                 Debug.Log("unknown collider");
@@ -156,10 +151,10 @@ public class PlayerController : MonoBehaviour {
     }
 
 
-    IEnumerator Goal(GameObject goalSwitch)
+    IEnumerator PushSwitch(GameObject goalSwitch)
     {
 
-        isInStage = false;
+        stageDirector.stageState = StageDirector.STAGESTATE.NONE;
 
         float targetPosX;
         float targetPosY;
@@ -181,8 +176,32 @@ public class PlayerController : MonoBehaviour {
 
         yield return new WaitForSeconds(0.5f);
 
-        stageDirector.EndGame();
+        stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
 
         yield break;
+    }
+
+    IEnumerator EnterGoal(GameObject goal)
+    {
+        stageDirector.stageState = StageDirector.STAGESTATE.NONE;
+
+        float targetPosX;
+        float targetPosY;
+
+        yield return new WaitForSeconds(0.5f);
+
+        while ((goal.transform.position - transform.position).magnitude > 0.05f)
+        {
+
+            targetPosX = Mathf.SmoothStep(transform.position.x, goal.transform.position.x, goalSpeed);
+            targetPosY = Mathf.SmoothStep(transform.position.y, goal.transform.position.y, goalSpeed);
+
+            transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        stageDirector.EndGame();
     }
 }

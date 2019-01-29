@@ -37,7 +37,7 @@ public class EnemyController : MonoBehaviour {
     IEnumerator switchCoroutine;
 
     // TODO 最終的にはStartではなく、ステージアクティブになったら以下の処理を行う
-    void Start ()
+    void OnEnable ()
     {
         playerController = FindObjectOfType<PlayerController>();
         player = GameObject.Find("Player");
@@ -50,6 +50,14 @@ public class EnemyController : MonoBehaviour {
         {
             case 1:
                 switchCoroutine = SwitchDirectionPattern1();
+                StartCoroutine(switchCoroutine);
+                break;
+            case 2:
+                switchCoroutine = SwitchDirectionPattern2();
+                StartCoroutine(switchCoroutine);
+                break;
+            case 3:
+                switchCoroutine = SwitchDirectionPattern2();
                 StartCoroutine(switchCoroutine);
                 break;
         }
@@ -67,7 +75,7 @@ public class EnemyController : MonoBehaviour {
 
         if (degree > 45f && degree < 135f) { return DIRECTION.BACK; }
 
-        if (degree > 135f && degree > -135f) { return DIRECTION.LEFT; }
+        if (degree > 135f || degree < -135f) { return DIRECTION.LEFT; }
 
         return DIRECTION.NONE;
     }
@@ -76,19 +84,19 @@ public class EnemyController : MonoBehaviour {
     {
         // ゲームステージ中のみ敵の動きを実行
         // Update内でステージ状況監視する以外思いつかなかった...
-        if (!playerController.isInStage) { StopCoroutine(switchCoroutine); }
+        if (stageDirector.stageState != StageDirector.STAGESTATE.INSTAGE) { StopCoroutine(switchCoroutine); }
 
         // 敵に見つかったらゲームオーバー
-        if (hit && hit.collider.CompareTag("Player") && playerController.isInStage)
+        if (hit && hit.collider.CompareTag("Player") && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
         {
-            playerController.isInStage = false;
+            stageDirector.stageState = StageDirector.STAGESTATE.NONE;
             StartCoroutine(Teleportation());
         }
 
         // 敵にぶつかってもゲームオーバー
-        if(playerController.isInStage && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
+        if(player && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
         {
-            playerController.isInStage = false;
+            stageDirector.stageState = StageDirector.STAGESTATE.NONE;
             StartCoroutine(Attack());
         }
     }
@@ -136,6 +144,48 @@ public class EnemyController : MonoBehaviour {
 
     }
 
+    public IEnumerator SwitchDirectionPattern2()
+    {
+        // 上→下→右→左
+        while (true)
+        {
+            TurnBack();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnLeft();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnFront();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnRight();
+            yield return new WaitForSeconds(switchSpeed);
+
+        }
+
+    }
+
+    public IEnumerator SwitchDirectionPattern3()
+    {
+        // 上→下→右→左
+        while (true)
+        {
+            TurnLeft();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnFront();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnBack();
+            yield return new WaitForSeconds(switchSpeed);
+
+            TurnRight();
+            yield return new WaitForSeconds(switchSpeed);
+
+        }
+
+    }
+
     void TurnFront()
     {
         enemyEyeDirection = DIRECTION.FRONT;
@@ -170,6 +220,7 @@ public class EnemyController : MonoBehaviour {
         // プレイヤーのそばに移動
         findPos = DetermineFindPos();
         MovePlayerSide();
+        enemyAnimator.SetTrigger("TurnFront");  // 攻撃のときは正面を向く
         yield return new WaitForSeconds(vanishSpeed);
 
         // 現れる
