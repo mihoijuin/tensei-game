@@ -26,6 +26,7 @@ public class StageDirector : MonoBehaviour {
     {
         stageState = STAGESTATE.INSTAGE;
     }
+
     private void FixedUpdate()
     {
         if(player && player.transform.position.x > stage2Checker.transform.position.x && stageState == STAGESTATE.MOVE)
