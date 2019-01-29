@@ -8,11 +8,11 @@ public class CameraController : MonoBehaviour {
 
     public GameObject player;
 
-    Vector3 offset;
+    float offsetX;
 	
 	void Start () {
         stageDirector = FindObjectOfType<StageDirector>();
-        offset = transform.position - player.transform.position;
+        offsetX = transform.position.x - player.transform.position.x;
 	}
 	
 	
@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour {
 		if(stageDirector.stageState == StageDirector.STAGESTATE.MOVE)
         {
             // TODO 入り出しが汚いので何かしらの処理をする
-            transform.position = player.transform.position + offset;
+            transform.position = new Vector3(player.transform.position.x + offsetX, transform.position.y, transform.position.z);
         }
     }
 }
