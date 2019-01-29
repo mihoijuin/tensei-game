@@ -235,9 +235,13 @@ public class EnemyController : MonoBehaviour {
 
     IEnumerator Attack()
     {
+
         // TODO 攻撃モーション
+        yield return new WaitForSeconds(0.5f);
+        enemyAnimator.SetTrigger("Attack");
 
         // プレイヤー消滅
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(playerController.Die());
 
         // 消滅まで待機
