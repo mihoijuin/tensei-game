@@ -2009,7 +2009,23 @@ Prefab:
       propertyPath: m_Size.x
       value: 1.5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 212313611835410716, guid: 72e22acd2050442baa323a6f3cae9f5d,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212313611835410716, guid: 72e22acd2050442baa323a6f3cae9f5d,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212313611835410716, guid: 72e22acd2050442baa323a6f3cae9f5d,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114507814363931120, guid: 72e22acd2050442baa323a6f3cae9f5d, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 72e22acd2050442baa323a6f3cae9f5d, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1001 &950544862

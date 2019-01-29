@@ -11,6 +11,12 @@ public class PlayerController : MonoBehaviour {
 
     public float stageMoveSpeed;
 
+    // 揺らぎ
+    public float playerScaleOffset = 0.1f;
+    public float playerMinScale = 0.9f;
+    public float fluctuationSpeed = 0.15f;
+    float scaleCount;
+
 
     // 色変化
     [SerializeField]
@@ -30,15 +36,37 @@ public class PlayerController : MonoBehaviour {
     public Rigidbody2D playerRigid;
     Renderer playerRenderer;
 
+    GameObject playerAura;
+    Renderer auraRenderer;
+
+    Color originColor;
+    float originscale;
+
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
         itemDirector = FindObjectOfType<ItemDirector>();
         stageDirector = FindObjectOfType<StageDirector>();
-        playerRenderer = GetComponent<Renderer>();        
+        playerRenderer = GetComponent<Renderer>();
+        playerAura = transform.GetChild(0).gameObject;
+        auraRenderer = playerAura.GetComponent<Renderer>();
+
+        originColor = playerRenderer.material.color;
+        originscale = transform.localScale.x;
+
 	}
-	
-	
-	void FixedUpdate () {
+
+    private void Update()
+    {
+        if (stageDirector.stageState != StageDirector.STAGESTATE.NONE)
+        {
+            // 炎のようにゆらゆら
+            scaleCount = Mathf.PingPong(Time.time * fluctuationSpeed, playerScaleOffset) + playerMinScale;
+            playerAura.transform.localScale = new Vector3(scaleCount, scaleCount, 1);
+        }
+    }
+
+
+    void FixedUpdate () {
         // 基本動作
         switch (stageDirector.stageState)
         {
@@ -100,22 +128,26 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Color currentColor = playerRenderer.material.color;
-
         switch (collision.tag)
         {
             case "GoodItem":
+                // ポイントを増加
                 itemDirector.CountUpPoint();
                 itemDirector.SwitchState();
-                // 色を変更
-                playerRenderer.material.color = new Color(currentColor.r, currentColor.g + colorChangeAmount, currentColor.b + colorChangeAmount);
+
+                // プレイヤーの見た目状態を更新
+                StrengthenPlayerVisual();
+
                 Destroy(collision.gameObject);
                 break;
             case "BadItem":
+                // ポイント現象
                 itemDirector.CountDownPoint();
                 itemDirector.SwitchState();
-                // 色を変更
-                playerRenderer.material.color = new Color(currentColor.r, currentColor.g - colorChangeAmount, currentColor.b - colorChangeAmount);
+
+                // プレイヤーの見た目を更新
+                WeakenPlayerVisiual();
+
                 Destroy(collision.gameObject);
                 break;
             case "Switch":
@@ -130,6 +162,44 @@ public class PlayerController : MonoBehaviour {
        }
 
     }
+
+    void StrengthenPlayerVisual()
+    {
+        Color currentColor = playerRenderer.material.color;
+
+        // 色が変更されていたら元に戻す
+        if(originColor != currentColor)
+        {
+            playerRenderer.material.color = new Color(currentColor.r + colorChangeAmount, currentColor.g, currentColor.b);
+            auraRenderer.material.color = new Color(currentColor.r + colorChangeAmount, currentColor.g, currentColor.b);
+        }
+        else
+        {
+            // オーラが大きくなっていく
+            // TODO 揺らぎに変えたら動かし方変える
+            playerMinScale += 0.1f;
+        }
+
+    }
+
+    void WeakenPlayerVisiual()
+    {
+        Color currentColor = playerRenderer.material.color;
+
+        // オーラ大きさが変わっていたら元に戻す
+        if(playerMinScale > originscale)
+        {
+            playerMinScale -= 0.1f;
+        }
+        else
+        {
+            // 色を変更
+            playerRenderer.material.color = new Color(currentColor.r - colorChangeAmount, currentColor.g, currentColor.b);
+            auraRenderer.material.color = new Color(currentColor.r - colorChangeAmount, currentColor.g, currentColor.b);
+        }
+
+    }
+
 
     public IEnumerator Die()
     {
