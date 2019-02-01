@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     // ゴール判定
     public float goalSpeed;
 
+    BGMDirector bgmDirector;
     SEDirector seDirector;
 
 
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour {
 
         itemDirector = FindObjectOfType<ItemDirector>();
         stageDirector = FindObjectOfType<StageDirector>();
+        bgmDirector = FindObjectOfType<BGMDirector>();
         seDirector = FindObjectOfType<SEDirector>();
 
         originColor = playerRenderer.material.color;
@@ -233,6 +235,7 @@ public class PlayerController : MonoBehaviour {
     IEnumerator PushSwitch(GameObject goalSwitch)
     {
 
+        bgmDirector.StopBGM();
         stageDirector.stageState = StageDirector.STAGESTATE.NONE;
 
         float targetPosX;
@@ -256,6 +259,7 @@ public class PlayerController : MonoBehaviour {
 
         yield return new WaitForSeconds(0.5f);
 
+        bgmDirector.PlayStageMusic();
         stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
 
         yield break;
@@ -263,6 +267,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator EnterGoal(GameObject goal)
     {
+        bgmDirector.StopBGM();
         stageDirector.stageState = StageDirector.STAGESTATE.NONE;
 
         float targetPosX;
@@ -280,6 +285,9 @@ public class PlayerController : MonoBehaviour {
 
             yield return new WaitForSeconds(0.01f);
         }
+
+        seDirector.PlaySE(SEDirector.SE.SWITCH);
+        stageDirector.DestroyStage(goal.transform.parent.gameObject);
 
         yield return new WaitForSeconds(0.5f);
         stageDirector.EndGame();

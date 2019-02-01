@@ -19,6 +19,7 @@ public class EnemyController : MonoBehaviour {
 
     StageDirector stageDirector;
     SEDirector seDirector;
+    BGMDirector bgmDirector;
 
     enum DIRECTION
     {
@@ -44,6 +45,7 @@ public class EnemyController : MonoBehaviour {
         player = GameObject.Find("Player");
 
         stageDirector = FindObjectOfType<StageDirector>();
+        bgmDirector = FindObjectOfType<BGMDirector>();
         seDirector = FindObjectOfType<SEDirector>();
 
         enemyAnimator = GetComponent<Animator>();        
@@ -91,7 +93,8 @@ public class EnemyController : MonoBehaviour {
         // 敵に見つかったらゲームオーバー
         if (hit && hit.collider.CompareTag("Player") && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
         {
-            stageDirector.stageState = StageDirector.STAGESTATE.NONE;
+            stageDirector.stageState = StageDirector.STAGESTATE.NONE;       //TODO ほんとはこの状態切り替わった時にStageDirectorとかでBGMを切り替えたい
+            bgmDirector.StopBGM();
             StartCoroutine(Teleportation());
         }
 
@@ -99,6 +102,7 @@ public class EnemyController : MonoBehaviour {
         if(player && stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE && (player.transform.position - transform.position).magnitude < playerController.playerRadius * 1.5f)
         {
             stageDirector.stageState = StageDirector.STAGESTATE.NONE;
+            bgmDirector.StopBGM();
             StartCoroutine(Attack());
         }
     }
