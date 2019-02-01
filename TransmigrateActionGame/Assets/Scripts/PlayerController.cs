@@ -275,10 +275,13 @@ public class PlayerController : MonoBehaviour {
         // スイッチを押す
         transform.Translate(0, -0.5f, 0);
         seDirector.PlaySE(SEDirector.SE.SWITCH);
-        yield return new WaitForSeconds(0.5f);
+        goalSwitch.GetComponent<Animator>().SetTrigger("Push");
+
+        yield return new WaitForSeconds(1f);
 
         // 戻る
         transform.Translate(0, 0.5f, 0);
+        yield return new WaitForSeconds(0.5f);
 
         stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
         yield return new WaitForSeconds(0.5f);
