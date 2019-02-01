@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour {
         {
             // オーラが大きくなっていく
             // TODO 揺らぎに変えたら動かし方変える
-            playerMinScale += 0.1f;
+            playerMinScale += 0.05f;
         }
 
     }

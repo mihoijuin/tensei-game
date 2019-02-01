@@ -1421,6 +1421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 24112245}
+  followSpeed: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -2103,12 +2104,12 @@ Prefab:
     - target: {fileID: 114459206553890318, guid: 72e22acd2050442baa323a6f3cae9f5d,
         type: 2}
       propertyPath: playerMinScale
-      value: 0.9
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 114459206553890318, guid: 72e22acd2050442baa323a6f3cae9f5d,
         type: 2}
       propertyPath: playerScaleOffset
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 50248514488252018, guid: 72e22acd2050442baa323a6f3cae9f5d,
         type: 2}
