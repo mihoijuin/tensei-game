@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class EndDirector : MonoBehaviour {
 
-    BGMDirector bgmDirector;
+
 
     public GameObject goodEnd;
     public GameObject normalEnd;
@@ -15,9 +15,6 @@ public class EndDirector : MonoBehaviour {
     public float intarval;
 
 	void Start () {
-
-        bgmDirector = FindObjectOfType<BGMDirector>();
-        bgmDirector.StopBGM();
 
         switch (ItemDirector.PointState)
         {

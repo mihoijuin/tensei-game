@@ -8,7 +8,7 @@ public class BGMDirector : MonoBehaviour {
 
     private AudioSource audioSource;
 
-    public enum BGM
+    private enum BGM
     {
         NONE = -1,
 
@@ -18,7 +18,7 @@ public class BGMDirector : MonoBehaviour {
         NUM
     }
 
-    void Start () {
+    void Awake () {
         audioSource = GetComponent<AudioSource>();
         DontDestroyOnLoad(this.gameObject);
 	}

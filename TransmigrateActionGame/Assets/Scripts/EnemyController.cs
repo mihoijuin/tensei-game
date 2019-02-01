@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour {
 
 
     StageDirector stageDirector;
+    SEDirector seDirector;
 
     enum DIRECTION
     {
@@ -43,6 +44,7 @@ public class EnemyController : MonoBehaviour {
         player = GameObject.Find("Player");
 
         stageDirector = FindObjectOfType<StageDirector>();
+        seDirector = FindObjectOfType<SEDirector>();
 
         enemyAnimator = GetComponent<Animator>();        
 
@@ -241,6 +243,8 @@ public class EnemyController : MonoBehaviour {
         // TODO 攻撃モーション
         yield return new WaitForSeconds(0.5f);
         enemyAnimator.SetTrigger("Attack");
+
+        seDirector.PlaySE(SEDirector.SE.DAMAGE);
 
         // プレイヤー消滅
         yield return new WaitForSeconds(0.5f);

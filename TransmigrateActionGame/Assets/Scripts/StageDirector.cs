@@ -14,6 +14,8 @@ public class StageDirector : MonoBehaviour {
 
     BGMDirector bgmDirector;
 
+    bool gameStoped = false;
+
     public enum STAGESTATE
     {
         NONE = -1,

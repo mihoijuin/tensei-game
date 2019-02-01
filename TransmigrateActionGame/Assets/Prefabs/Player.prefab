@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4988768793016166}
   - component: {fileID: 212565364287265478}
-  - component: {fileID: 114507814363931120}
   m_Layer: 0
   m_Name: PlayreAura
   m_TagString: Untagged
@@ -110,7 +109,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.81, y: 1.36}
+    oldSize: {x: 1.448, y: 1.088}
     newSize: {x: 4, y: 4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -134,25 +133,14 @@ MonoBehaviour:
   slideSpeed: 0.3
   playerRadius: 0.8
   stageMoveSpeed: 3
+  playerScaleOffset: 0.1
+  playerMinScale: 0.9
+  fluctuationSpeed: 0.15
   colorChangeAmount: 0.3
   flashSpeed: 0.1
   flashtimes: 3
   goalSpeed: 0.1
   playerRigid: {fileID: 0}
---- !u!114 &114507814363931120
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1510700089528428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 916ced6e1d203491f8697115bde4b7a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerScaleOffset: 0.2
-  playerMinScale: 1
-  fluctuationSpeed: 0.15
 --- !u!212 &212313611835410716
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -186,7 +174,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1160178851
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4136baffa3585480684d3b10a69c4269, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour {
     public float fluctuationSpeed = 0.15f;
     float scaleCount;
 
-
     // 色変化
     [SerializeField]
     private float colorChangeAmount;
@@ -28,6 +27,8 @@ public class PlayerController : MonoBehaviour {
 
     // ゴール判定
     public float goalSpeed;
+
+    SEDirector seDirector;
 
 
     ItemDirector itemDirector;
@@ -44,11 +45,13 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
         playerRigid = GetComponent<Rigidbody2D>();
-        itemDirector = FindObjectOfType<ItemDirector>();
-        stageDirector = FindObjectOfType<StageDirector>();
         playerRenderer = GetComponent<Renderer>();
         playerAura = transform.GetChild(0).gameObject;
         auraRenderer = playerAura.GetComponent<Renderer>();
+
+        itemDirector = FindObjectOfType<ItemDirector>();
+        stageDirector = FindObjectOfType<StageDirector>();
+        seDirector = FindObjectOfType<SEDirector>();
 
         originColor = playerRenderer.material.color;
         originscale = transform.localScale.x;
@@ -135,6 +138,9 @@ public class PlayerController : MonoBehaviour {
                 itemDirector.CountUpPoint();
                 itemDirector.SwitchState();
 
+                // SEならす
+                seDirector.PlaySE(SEDirector.SE.GOODITEM);
+
                 // プレイヤーの見た目状態を更新
                 StrengthenPlayerVisual();
 
@@ -144,6 +150,9 @@ public class PlayerController : MonoBehaviour {
                 // ポイント現象
                 itemDirector.CountDownPoint();
                 itemDirector.SwitchState();
+
+                // SEならす
+                seDirector.PlaySE(SEDirector.SE.BADITEM);
 
                 // プレイヤーの見た目を更新
                 WeakenPlayerVisiual();
@@ -242,6 +251,7 @@ public class PlayerController : MonoBehaviour {
             yield return new WaitForSeconds(0.01f);
         }
 
+        seDirector.PlaySE(SEDirector.SE.SWITCH);
         stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
 
         yield return new WaitForSeconds(0.5f);
