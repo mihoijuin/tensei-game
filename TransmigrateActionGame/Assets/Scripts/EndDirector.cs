@@ -47,7 +47,7 @@ public class EndDirector : MonoBehaviour {
         bgmDirector.PlayGoodendMusic();
         goodEnd.transform.GetChild(0).gameObject.SetActive(false);
         goodEnd.transform.GetChild(1).gameObject.SetActive(true);
-        yield return new WaitForSeconds(intarval + 3f);
+        yield return new WaitForSeconds(intarval + 5f);
 
         GoToStartScene();
 

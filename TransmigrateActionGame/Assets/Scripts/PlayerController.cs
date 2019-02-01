@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     public float goalSpeed;
     public GameObject goal;
 
+    public GameObject background;
 
     BGMDirector bgmDirector;
     SEDirector seDirector;
@@ -161,7 +162,7 @@ public class PlayerController : MonoBehaviour {
                     
                     // SEならす
                     seDirector.PlaySE(SEDirector.SE.BADITEM);
-                    
+
                     // プレイヤーの見た目を更新
                     WeakenPlayerVisiual();
                     
@@ -327,7 +328,28 @@ public class PlayerController : MonoBehaviour {
             yield return new WaitForSeconds(0.01f);
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
+
+        Destroy(background);
+        Destroy(goal);
+
+        yield return new WaitForSeconds(0.5f);
+
+        SpriteRenderer playerSprite = GetComponent<SpriteRenderer>();
+        SpriteRenderer auraSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        Color playerColor = playerSprite.color;
+        Color auraColor = auraSprite.color;
+
+        while (playerSprite.color.a > 0f)
+        {
+            playerColor.a -= 0.1f;
+            playerSprite.color = new Color(playerColor.r, playerColor.g, playerColor.b, playerColor.a);
+            auraSprite.color = new Color(auraColor.r, auraColor.g, auraColor.b, playerColor.a);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield return new WaitForSeconds(3f);
+
         stageDirector.EndGame();
 
         yield break;
