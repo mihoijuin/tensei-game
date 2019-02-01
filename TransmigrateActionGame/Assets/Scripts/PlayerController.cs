@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
@@ -27,6 +26,8 @@ public class PlayerController : MonoBehaviour {
 
     // ゴール判定
     public float goalSpeed;
+    public GameObject goal;
+
 
     BGMDirector bgmDirector;
     SEDirector seDirector;
@@ -133,47 +134,47 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        switch (collision.tag)
+
+        if(stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
         {
-            case "GoodItem":
-                // ポイントを増加
-                itemDirector.CountUpPoint();
-                itemDirector.SwitchState();
-
-                // SEならす
-                seDirector.PlaySE(SEDirector.SE.GOODITEM);
-
-                // プレイヤーの見た目状態を更新
-                StrengthenPlayerVisual();
-
-                Destroy(collision.gameObject);
-                break;
-            case "BadItem":
-                // ポイント現象
-                itemDirector.CountDownPoint();
-                itemDirector.SwitchState();
-
-                // SEならす
-                seDirector.PlaySE(SEDirector.SE.BADITEM);
-
-                // プレイヤーの見た目を更新
-                WeakenPlayerVisiual();
-
-                Destroy(collision.gameObject);
-                break;
-            case "Switch":
-                // スイッチ押す動作再発
-                if(stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
-                {
+            switch (collision.tag)
+            {
+                case "GoodItem":
+                    // ポイントを増加
+                    itemDirector.CountUpPoint();
+                    itemDirector.SwitchState();
+                    
+                    // SEならす
+                    seDirector.PlaySE(SEDirector.SE.GOODITEM);
+                    
+                    // プレイヤーの見た目状態を更新
+                    StrengthenPlayerVisual();
+                    
+                    Destroy(collision.gameObject);
+                    break;
+                case "BadItem":
+                    // ポイント現象
+                    itemDirector.CountDownPoint();
+                    itemDirector.SwitchState();
+                    
+                    // SEならす
+                    seDirector.PlaySE(SEDirector.SE.BADITEM);
+                    
+                    // プレイヤーの見た目を更新
+                    WeakenPlayerVisiual();
+                    
+                    Destroy(collision.gameObject);
+                    break;
+                case "Switch":
                     StartCoroutine(ReachStage1Switch(collision.gameObject));
-                }
-                break;
-            case "Goal":
-                StartCoroutine(ReachStage2Switch(collision.gameObject));
-                break;
-            default:
-                Debug.Log("unknown collider");
-                break;
+                    break;
+                case "Goal":
+                    StartCoroutine(ReachStage2Switch(collision.gameObject));
+                    break;
+                default:
+                    Debug.Log("unknown collider");
+                    break;
+            }
        }
 
     }
@@ -274,8 +275,8 @@ public class PlayerController : MonoBehaviour {
 
         // スイッチを押す
         transform.Translate(0, -0.5f, 0);
-        seDirector.PlaySE(SEDirector.SE.SWITCH);
         goalSwitch.GetComponent<Animator>().SetTrigger("Push");
+        seDirector.PlaySE(SEDirector.SE.SWITCH);
 
         yield return new WaitForSeconds(1f);
 
@@ -296,8 +297,19 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(PushSwitch(goalSwitch));
         yield return new WaitWhile(() => goalSwitch);
 
+        StartCoroutine(Goal());
 
-        yield return new WaitForSeconds(1f);
-        stageDirector.EndGame();
+        //yield return new WaitForSeconds(1f);
+        //stageDirector.EndGame();
+    }
+
+
+    IEnumerator Goal()
+    {
+        goal.SetActive(true);
+        Debug.Log(goal);
+
+        yield break;
+
     }
 }
