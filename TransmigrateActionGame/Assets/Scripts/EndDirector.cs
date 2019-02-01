@@ -6,16 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class EndDirector : MonoBehaviour {
 
-
-
     public GameObject goodEnd;
     public GameObject normalEnd;
     public GameObject badEnd;
 
+    BGMDirector bgmDirector;
+
     public float intarval;
 
-	void Start () {
+    private void Awake()
+    {
+        bgmDirector = FindObjectOfType<BGMDirector>();
+    }
 
+    void Start () {
         switch (ItemDirector.PointState)
         {
             case ItemDirector.POINTSTATE.GOOD:
@@ -33,11 +37,14 @@ public class EndDirector : MonoBehaviour {
         }
     }
 
+
     IEnumerator ShowGoodEnd()
     {
         goodEnd.SetActive(true);
         yield return new WaitForSeconds(intarval);
 
+
+        bgmDirector.PlayGoodendMusic();
         goodEnd.transform.GetChild(0).gameObject.SetActive(false);
         goodEnd.transform.GetChild(1).gameObject.SetActive(true);
         yield return new WaitForSeconds(intarval);

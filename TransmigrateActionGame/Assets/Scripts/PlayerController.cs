@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour {
 
         // 戻る
         transform.Translate(0, 0.5f, 0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
         yield return new WaitForSeconds(0.5f);
