@@ -162,10 +162,14 @@ public class PlayerController : MonoBehaviour {
                 Destroy(collision.gameObject);
                 break;
             case "Switch":
-                StartCoroutine(PushSwitch(collision.gameObject));
+                // スイッチ押す動作再発
+                if(stageDirector.stageState == StageDirector.STAGESTATE.INSTAGE)
+                {
+                    StartCoroutine(ReachStage1Switch(collision.gameObject));
+                }
                 break;
             case "Goal":
-                StartCoroutine(EnterGoal(collision.gameObject));
+                StartCoroutine(ReachStage2Switch(collision.gameObject));
                 break;
             default:
                 Debug.Log("unknown collider");
@@ -232,32 +236,13 @@ public class PlayerController : MonoBehaviour {
     }
 
 
-    IEnumerator PushSwitch(GameObject goalSwitch)
+    IEnumerator ReachStage1Switch(GameObject goalSwitch)
     {
 
-        bgmDirector.StopBGM();
-        stageDirector.stageState = StageDirector.STAGESTATE.NONE;
+        StartCoroutine(PushSwitch(goalSwitch));
+        yield return new WaitWhile(() => goalSwitch);
 
-        float targetPosX;
-        float targetPosY;
-
-        yield return new WaitForSeconds(0.5f);
-
-        while ((goalSwitch.transform.position - transform.position).magnitude > 0.05f)
-        {
-
-            targetPosX = Mathf.SmoothStep(transform.position.x, goalSwitch.transform.position.x, goalSpeed);
-            targetPosY = Mathf.SmoothStep(transform.position.y, goalSwitch.transform.position.y, goalSpeed);
-
-            transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
-
-            yield return new WaitForSeconds(0.01f);
-        }
-
-        seDirector.PlaySE(SEDirector.SE.SWITCH);
-        stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
-
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         bgmDirector.PlayStageMusic();
         stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
@@ -265,31 +250,54 @@ public class PlayerController : MonoBehaviour {
         yield break;
     }
 
-    IEnumerator EnterGoal(GameObject goal)
+    IEnumerator PushSwitch(GameObject goalSwitch)
     {
         bgmDirector.StopBGM();
         stageDirector.stageState = StageDirector.STAGESTATE.NONE;
 
+        Vector3 targetPos = new Vector3(goalSwitch.transform.position.x, goalSwitch.transform.position.y + 1.5f, goalSwitch.transform.position.z);
         float targetPosX;
         float targetPosY;
 
         yield return new WaitForSeconds(0.5f);
 
-        while ((goal.transform.position - transform.position).magnitude > 0.05f)
+        while ((targetPos - transform.position).magnitude > 0.05f)
         {
 
-            targetPosX = Mathf.SmoothStep(transform.position.x, goal.transform.position.x, goalSpeed);
-            targetPosY = Mathf.SmoothStep(transform.position.y, goal.transform.position.y, goalSpeed);
+            targetPosX = Mathf.SmoothStep(transform.position.x, goalSwitch.transform.position.x, goalSpeed);
+            targetPosY = Mathf.SmoothStep(transform.position.y, goalSwitch.transform.position.y + 1.5f, goalSpeed);     // スイッチを押すため若干上に出る
 
             transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
 
             yield return new WaitForSeconds(0.01f);
         }
 
+        // スイッチを押す
+        transform.Translate(0, -0.5f, 0);
         seDirector.PlaySE(SEDirector.SE.SWITCH);
-        stageDirector.DestroyStage(goal.transform.parent.gameObject);
+        goalSwitch.GetComponent<Animator>().SetTrigger("Push");
 
+        yield return new WaitForSeconds(1f);
+
+        // 戻る
+        transform.Translate(0, 0.5f, 0);
         yield return new WaitForSeconds(0.5f);
+
+        stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
+        yield return new WaitForSeconds(0.5f);
+
+        yield break;
+    }
+
+
+
+    IEnumerator ReachStage2Switch(GameObject goalSwitch)
+    {
+        StartCoroutine(PushSwitch(goalSwitch));
+        yield return new WaitWhile(() => goalSwitch);
+
+
+        yield return new WaitForSeconds(1f);
         stageDirector.EndGame();
     }
 }
