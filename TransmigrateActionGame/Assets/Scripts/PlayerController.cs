@@ -265,8 +265,8 @@ public class PlayerController : MonoBehaviour {
         while ((targetPos - transform.position).magnitude > 0.05f)
         {
 
-            targetPosX = Mathf.SmoothStep(transform.position.x, goalSwitch.transform.position.x, goalSpeed);
-            targetPosY = Mathf.SmoothStep(transform.position.y, goalSwitch.transform.position.y + 1.5f, goalSpeed);     // スイッチを押すため若干上に出る
+            targetPosX = Mathf.SmoothStep(transform.position.x, targetPos.x, goalSpeed);
+            targetPosY = Mathf.SmoothStep(transform.position.y, targetPos.y, goalSpeed);     // スイッチを押すため若干上に出る
 
             transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
 
@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour {
         goalSwitch.GetComponent<Animator>().SetTrigger("Push");
         seDirector.PlaySE(SEDirector.SE.SWITCH);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
 
         // 戻る
         transform.Translate(0, 0.5f, 0);
@@ -297,17 +297,35 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(PushSwitch(goalSwitch));
         yield return new WaitWhile(() => goalSwitch);
 
-        StartCoroutine(Goal());
 
-        //yield return new WaitForSeconds(1f);
-        //stageDirector.EndGame();
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(Goal());
     }
 
 
     IEnumerator Goal()
     {
         goal.SetActive(true);
-        Debug.Log(goal);
+
+        Vector3 targetPos = new Vector3(goal.transform.position.x, goal.transform.position.y, goal.transform.position.z);
+        float targetPosX;
+        float targetPosY;
+
+        yield return new WaitForSeconds(0.5f);
+
+        while ((targetPos - transform.position).magnitude > 0.05f)
+        {
+
+            targetPosX = Mathf.SmoothStep(transform.position.x, targetPos.x, goalSpeed);
+            targetPosY = Mathf.SmoothStep(transform.position.y, targetPos.y, goalSpeed);     // スイッチを押すため若干上に出る
+
+            transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        yield return new WaitForSeconds(1f);
+        stageDirector.EndGame();
 
         yield break;
 
