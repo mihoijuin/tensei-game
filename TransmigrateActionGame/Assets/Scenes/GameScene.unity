@@ -1103,12 +1103,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 212583605208085636, guid: 46cf427dcd4144720aa64e6efca73816,
-        type: 2}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d3cbb3f39c4b34cc8af4394da7111ff0,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46cf427dcd4144720aa64e6efca73816, type: 2}
   m_IsPrefabAsset: 0
@@ -1421,7 +1415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 24112245}
-  followSpeed: 0
+  followSpeed: 0.09
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

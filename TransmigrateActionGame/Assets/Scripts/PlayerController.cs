@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour {
 
     BGMDirector bgmDirector;
     SEDirector seDirector;
+    CameraController cameraController;
 
 
     ItemDirector itemDirector;
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour {
         stageDirector = FindObjectOfType<StageDirector>();
         bgmDirector = FindObjectOfType<BGMDirector>();
         seDirector = FindObjectOfType<SEDirector>();
+        cameraController = FindObjectOfType<CameraController>();
 
         originColor = playerRenderer.material.color;
         originscale = transform.localScale.x;
@@ -243,10 +245,11 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(PushSwitch(goalSwitch));
         yield return new WaitWhile(() => goalSwitch);
 
-        yield return new WaitForSeconds(1f);
+        // カメラを移動
+        StartCoroutine(cameraController.FollowPlayer());
 
+        yield return new WaitUntil(() => stageDirector.stageState == StageDirector.STAGESTATE.MOVE);
         bgmDirector.PlayStageMusic();
-        stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
 
         yield break;
     }
