@@ -310,6 +310,12 @@ public class PlayerController : MonoBehaviour {
     IEnumerator Goal()
     {
         goal.SetActive(true);
+        SpriteRenderer goalSprite = goal.GetComponent<SpriteRenderer>();
+        Color goalColor = goalSprite.color;
+        StartCoroutine(FeedIn(goalSprite, goalColor));
+
+        yield return new WaitWhile(() => goalSprite.color.a < 1f);
+
 
         Vector3 targetPos = new Vector3(goal.transform.position.x, goal.transform.position.y, goal.transform.position.z);
         float targetPosX;
@@ -333,20 +339,18 @@ public class PlayerController : MonoBehaviour {
         Destroy(background);
         Destroy(goal);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         SpriteRenderer playerSprite = GetComponent<SpriteRenderer>();
         SpriteRenderer auraSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
         Color playerColor = playerSprite.color;
         Color auraColor = auraSprite.color;
 
-        while (playerSprite.color.a > 0f)
-        {
-            playerColor.a -= 0.1f;
-            playerSprite.color = new Color(playerColor.r, playerColor.g, playerColor.b, playerColor.a);
-            auraSprite.color = new Color(auraColor.r, auraColor.g, auraColor.b, playerColor.a);
-            yield return new WaitForSeconds(0.1f);
-        }
+        StartCoroutine(FeedOut(playerSprite, playerColor));
+        StartCoroutine(FeedOut(auraSprite, auraColor));
+
+        yield return new WaitWhile(() => playerSprite.color.a > 0f);
+
 
         yield return new WaitForSeconds(3f);
 
@@ -354,5 +358,31 @@ public class PlayerController : MonoBehaviour {
 
         yield break;
 
+    }
+
+    IEnumerator FeedIn(SpriteRenderer sprite, Color color)
+    {
+        color.a = 0f;
+
+        while (sprite.color.a < 1f)
+        {
+            color.a += 0.1f;
+            sprite.color = new Color(color.r, color.g, color.b, color.a);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield break;
+    }
+
+    IEnumerator FeedOut(SpriteRenderer sprite, Color color)
+    {
+        while (sprite.color.a > 0f)
+        {
+            color.a -= 0.1f;
+            sprite.color = new Color(color.r, color.g, color.b, color.a);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield break;
     }
 }
