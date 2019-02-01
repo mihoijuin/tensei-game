@@ -12,6 +12,10 @@ public class StageDirector : MonoBehaviour {
 
     public GameObject stage2Checker;
 
+    BGMDirector bgmDirector;
+
+    bool gameStoped = false;
+
     public enum STAGESTATE
     {
         NONE = -1,
@@ -24,6 +28,8 @@ public class StageDirector : MonoBehaviour {
 
     private void Start()
     {
+        bgmDirector = FindObjectOfType<BGMDirector>();
+
         stageState = STAGESTATE.INSTAGE;
     }
 
@@ -51,12 +57,15 @@ public class StageDirector : MonoBehaviour {
 
     public IEnumerator GameOver()
     {
+
         yield return new WaitForSeconds(1f);
+
+        // ゲームオーバー用BGM
+        bgmDirector.PlayGameOverMusic();
 
         // ゲームオーバーを表示
         gameover.SetActive(true);
-
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
 
         Debug.Log("game over");
 

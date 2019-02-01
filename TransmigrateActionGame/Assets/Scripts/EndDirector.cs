@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class EndDirector : MonoBehaviour {
 
+
+
     public GameObject goodEnd;
     public GameObject normalEnd;
     public GameObject badEnd;
@@ -13,6 +15,7 @@ public class EndDirector : MonoBehaviour {
     public float intarval;
 
 	void Start () {
+
         switch (ItemDirector.PointState)
         {
             case ItemDirector.POINTSTATE.GOOD:
