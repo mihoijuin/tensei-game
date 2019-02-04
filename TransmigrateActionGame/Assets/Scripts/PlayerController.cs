@@ -248,6 +248,7 @@ public class PlayerController : MonoBehaviour {
         yield return new WaitWhile(() => goalSwitch);
 
         // カメラを移動
+        yield return new WaitForSeconds(1f);
         StartCoroutine(cameraController.FollowPlayer());
 
         yield return new WaitUntil(() => stageDirector.stageState == StageDirector.STAGESTATE.MOVE);
@@ -290,7 +291,6 @@ public class PlayerController : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
-        yield return new WaitForSeconds(0.5f);
 
         yield break;
     }
@@ -311,17 +311,11 @@ public class PlayerController : MonoBehaviour {
     IEnumerator Goal()
     {
         goalParticle.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
 
-        SpriteRenderer goalSprite = goal.GetComponent<SpriteRenderer>();
-        Color goalColor = goalSprite.color;
+        StartCoroutine(FadeIn(goal));
 
-        // 初期化
-        goal.SetActive(true);
-        goalSprite.color = new Color(goalColor.r, goalColor.g, goalColor.b, 0f);
-
-        StartCoroutine(FeedIn(goalSprite, goalColor));
-
-        yield return new WaitWhile(() => goalSprite.color.a < 1f);
+        yield return new WaitWhile(() => goal.GetComponent<SpriteRenderer>().color.a < 1f);
 
 
         Vector3 targetPos = new Vector3(goal.transform.position.x, goal.transform.position.y, goal.transform.position.z);
@@ -334,7 +328,7 @@ public class PlayerController : MonoBehaviour {
         {
 
             targetPosX = Mathf.SmoothStep(transform.position.x, targetPos.x, goalSpeed);
-            targetPosY = Mathf.SmoothStep(transform.position.y, targetPos.y, goalSpeed);     // スイッチを押すため若干上に出る
+            targetPosY = Mathf.SmoothStep(transform.position.y, targetPos.y, goalSpeed);
 
             transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
 
@@ -347,17 +341,12 @@ public class PlayerController : MonoBehaviour {
         Destroy(goal);
         Destroy(goalParticle);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
-        SpriteRenderer playerSprite = GetComponent<SpriteRenderer>();
-        SpriteRenderer auraSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        Color playerColor = playerSprite.color;
-        Color auraColor = auraSprite.color;
+        StartCoroutine(FadeOut(this.gameObject));
+        StartCoroutine(FadeOut(playerAura));
 
-        StartCoroutine(FeedOut(playerSprite, playerColor));
-        StartCoroutine(FeedOut(auraSprite, auraColor));
-
-        yield return new WaitWhile(() => playerSprite.color.a > 0f);
+        yield return new WaitWhile(() => this.gameObject.GetComponent<SpriteRenderer>().color.a > 0f);
 
 
         yield return new WaitForSeconds(3f);
@@ -368,8 +357,15 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    IEnumerator FeedIn(SpriteRenderer sprite, Color color)
+    IEnumerator FadeIn(GameObject fadeObject)
     {
+        SpriteRenderer sprite = fadeObject.GetComponent<SpriteRenderer>();
+        Color color = sprite.color;
+
+        // 最初は見えなくする
+        fadeObject.SetActive(true);
+        sprite.color = new Color(color.r, color.g, color.b, 0f);
+
         color.a = 0f;
 
         while (sprite.color.a < 1f)
@@ -382,8 +378,11 @@ public class PlayerController : MonoBehaviour {
         yield break;
     }
 
-    IEnumerator FeedOut(SpriteRenderer sprite, Color color)
+    IEnumerator FadeOut(GameObject fadeObject)
     {
+        SpriteRenderer sprite = fadeObject.GetComponent<SpriteRenderer>();
+        Color color = sprite.color;
+
         while (sprite.color.a > 0f)
         {
             color.a -= 0.1f;
