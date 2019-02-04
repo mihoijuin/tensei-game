@@ -10,9 +10,20 @@ public class EndDirector : MonoBehaviour {
     public GameObject normalEnd;
     public GameObject badEnd;
 
+    // グッドエンド
+    public GameObject pandaBaby;
+    public GameObject kawaiiTop;
+    public GameObject kawaiiBottom;
+    public GameObject goodEndTitle;
+    public GameObject restart;
+    public Sprite goodend_title_red;
+    public Sprite goodend_title_white;
+
+
     BGMDirector bgmDirector;
 
     public float intarval;
+    public float goodendInterval;
 
     private void Awake()
     {
@@ -40,7 +51,7 @@ public class EndDirector : MonoBehaviour {
     private void Update()
     {
         // リスタート説明が表示されたら、画面タップでスタートシーンに戻れる
-        if (goodEnd.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject.activeSelf)
+        if (restart.activeSelf)
         {
 
             if (Input.GetMouseButtonDown(0))
@@ -60,11 +71,46 @@ public class EndDirector : MonoBehaviour {
         bgmDirector.PlayGoodendMusic();
         goodEnd.transform.GetChild(0).gameObject.SetActive(false);
         goodEnd.transform.GetChild(1).gameObject.SetActive(true);
+
+        StartCoroutine(GoodEndMotion());
+
         yield return new WaitForSeconds(intarval);
 
         // リスタート説明を表示
-        goodEnd.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        restart.SetActive(true);
     }
+
+    IEnumerator GoodEndMotion()
+    {
+        Image titleImage = goodEndTitle.GetComponent<Image>();
+
+        while (true)
+        {
+            yield return new WaitForSeconds(goodendInterval);
+            titleImage.sprite = goodend_title_white;
+            pandaBaby.transform.Translate(0f, 10f, 0f);
+            
+
+            yield return new WaitForSeconds(goodendInterval);
+            titleImage.sprite = goodend_title_red;
+            pandaBaby.transform.Translate(0f, -10f, 0f);
+            kawaiiBottom.SetActive(true);
+
+            yield return new WaitForSeconds(goodendInterval);
+            titleImage.sprite = goodend_title_white;
+            pandaBaby.transform.Translate(0f, 10f, 0f);
+            kawaiiBottom.SetActive(false);
+            kawaiiTop.SetActive(true);
+
+            yield return new WaitForSeconds(goodendInterval);
+            titleImage.sprite = goodend_title_red;
+            kawaiiTop.SetActive(false);
+            pandaBaby.transform.Translate(0f, -10f, 0f);
+
+        }
+
+    }
+
 
     IEnumerator ShowNormalEnd()
     {
