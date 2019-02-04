@@ -74,7 +74,7 @@ public class EndDirector : MonoBehaviour {
 
         StartCoroutine(GoodEndMotion());
 
-        yield return new WaitForSeconds(intarval);
+        yield return new WaitForSeconds(intarval + 5f);
 
         // リスタート説明を表示
         restart.SetActive(true);

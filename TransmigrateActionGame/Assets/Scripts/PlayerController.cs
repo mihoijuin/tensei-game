@@ -311,7 +311,7 @@ public class PlayerController : MonoBehaviour {
     IEnumerator Goal()
     {
         goalParticle.SetActive(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         StartCoroutine(FadeIn(goal));
 
@@ -341,7 +341,7 @@ public class PlayerController : MonoBehaviour {
         Destroy(goal);
         Destroy(goalParticle);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
 
         StartCoroutine(FadeOut(this.gameObject));
         StartCoroutine(FadeOut(playerAura));
