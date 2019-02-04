@@ -37,6 +37,19 @@ public class EndDirector : MonoBehaviour {
         }
     }
 
+    private void Update()
+    {
+        // リスタート説明が表示されたら、画面タップでスタートシーンに戻れる
+        if (goodEnd.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject.activeSelf)
+        {
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                GoToStartScene();
+            }
+        }
+    }
+
 
     IEnumerator ShowGoodEnd()
     {
@@ -47,11 +60,10 @@ public class EndDirector : MonoBehaviour {
         bgmDirector.PlayGoodendMusic();
         goodEnd.transform.GetChild(0).gameObject.SetActive(false);
         goodEnd.transform.GetChild(1).gameObject.SetActive(true);
-        yield return new WaitForSeconds(intarval + 5f);
+        yield return new WaitForSeconds(intarval);
 
-        GoToStartScene();
-
-        yield break;
+        // リスタート説明を表示
+        goodEnd.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     IEnumerator ShowNormalEnd()
@@ -67,21 +79,6 @@ public class EndDirector : MonoBehaviour {
 
         yield break;
     }
-
-    //IEnumerator ShowNormal()
-    //{
-    //    normalEnd.SetActive(true);
-    //    Text endText = normalEnd.transform.GetChild(0).GetComponent<Text>();
-    //    string endString = endText.text;
-
-    //    // 最初は空の表示
-    //    endText.text = "";
-
-    //    char[] charList = { };
-
-    //    yield break;
-
-    //}
 
     IEnumerator ShowBadEnd()
     {
