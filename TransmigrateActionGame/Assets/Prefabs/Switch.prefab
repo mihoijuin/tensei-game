@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4519292678853884}
   - component: {fileID: 212583605208085636}
-  - component: {fileID: 58061277220109890}
   - component: {fileID: 95023341711311944}
-  m_Layer: 0
+  - component: {fileID: 61341256353807218}
+  m_Layer: 2
   m_Name: Switch
   m_TagString: Switch
   m_Icon: {fileID: 0}
@@ -42,8 +42,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &58061277220109890
-CircleCollider2D:
+--- !u!61 &61341256353807218
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -55,8 +55,18 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.42, y: 0.8}
+    newSize: {x: 1.15, y: 1.15}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.575
+  m_Size: {x: 1.42, y: 0.8}
+  m_EdgeRadius: 0
 --- !u!95 &95023341711311944
 Animator:
   serializedVersion: 3
@@ -110,7 +120,7 @@ SpriteRenderer:
   m_SortingLayerID: 1479905455
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6137b35ab06ef41999b03746ab847898, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3cbb3f39c4b34cc8af4394da7111ff0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
