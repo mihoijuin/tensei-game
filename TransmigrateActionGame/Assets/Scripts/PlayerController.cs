@@ -27,10 +27,13 @@ public class PlayerController : MonoBehaviour {
     // ゴール判定
     public float goalSpeed;
     public GameObject goal;
+    public GameObject goalParticle;
 
+    public GameObject background;
 
     BGMDirector bgmDirector;
     SEDirector seDirector;
+    CameraController cameraController;
 
 
     ItemDirector itemDirector;
@@ -55,6 +58,7 @@ public class PlayerController : MonoBehaviour {
         stageDirector = FindObjectOfType<StageDirector>();
         bgmDirector = FindObjectOfType<BGMDirector>();
         seDirector = FindObjectOfType<SEDirector>();
+        cameraController = FindObjectOfType<CameraController>();
 
         originColor = playerRenderer.material.color;
         originscale = transform.localScale.x;
@@ -159,7 +163,7 @@ public class PlayerController : MonoBehaviour {
                     
                     // SEならす
                     seDirector.PlaySE(SEDirector.SE.BADITEM);
-                    
+
                     // プレイヤーの見た目を更新
                     WeakenPlayerVisiual();
                     
@@ -193,7 +197,7 @@ public class PlayerController : MonoBehaviour {
         {
             // オーラが大きくなっていく
             // TODO 揺らぎに変えたら動かし方変える
-            playerMinScale += 0.1f;
+            playerMinScale += 0.05f;
         }
 
     }
@@ -243,10 +247,12 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(PushSwitch(goalSwitch));
         yield return new WaitWhile(() => goalSwitch);
 
+        // カメラを移動
         yield return new WaitForSeconds(1f);
+        StartCoroutine(cameraController.FollowPlayer());
 
+        yield return new WaitUntil(() => stageDirector.stageState == StageDirector.STAGESTATE.MOVE);
         bgmDirector.PlayStageMusic();
-        stageDirector.stageState = StageDirector.STAGESTATE.MOVE;
 
         yield break;
     }
@@ -282,10 +288,9 @@ public class PlayerController : MonoBehaviour {
 
         // 戻る
         transform.Translate(0, 0.5f, 0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         stageDirector.DestroyStage(goalSwitch.transform.parent.gameObject);
-        yield return new WaitForSeconds(0.5f);
 
         yield break;
     }
@@ -305,7 +310,13 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator Goal()
     {
-        goal.SetActive(true);
+        goalParticle.SetActive(true);
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(FadeIn(goal));
+
+        yield return new WaitWhile(() => goal.GetComponent<SpriteRenderer>().color.a < 1f);
+
 
         Vector3 targetPos = new Vector3(goal.transform.position.x, goal.transform.position.y, goal.transform.position.z);
         float targetPosX;
@@ -317,17 +328,68 @@ public class PlayerController : MonoBehaviour {
         {
 
             targetPosX = Mathf.SmoothStep(transform.position.x, targetPos.x, goalSpeed);
-            targetPosY = Mathf.SmoothStep(transform.position.y, targetPos.y, goalSpeed);     // スイッチを押すため若干上に出る
+            targetPosY = Mathf.SmoothStep(transform.position.y, targetPos.y, goalSpeed);
 
             transform.position = new Vector3(targetPosX, targetPosY, transform.position.z);
 
             yield return new WaitForSeconds(0.01f);
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
+
+        Destroy(background);
+        Destroy(goal);
+        Destroy(goalParticle);
+
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(FadeOut(this.gameObject));
+        StartCoroutine(FadeOut(playerAura));
+
+        yield return new WaitWhile(() => this.gameObject.GetComponent<SpriteRenderer>().color.a > 0f);
+
+
+        yield return new WaitForSeconds(3f);
+
         stageDirector.EndGame();
 
         yield break;
 
+    }
+
+    IEnumerator FadeIn(GameObject fadeObject)
+    {
+        SpriteRenderer sprite = fadeObject.GetComponent<SpriteRenderer>();
+        Color color = sprite.color;
+
+        // 最初は見えなくする
+        fadeObject.SetActive(true);
+        sprite.color = new Color(color.r, color.g, color.b, 0f);
+
+        color.a = 0f;
+
+        while (sprite.color.a < 1f)
+        {
+            color.a += 0.1f;
+            sprite.color = new Color(color.r, color.g, color.b, color.a);
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        yield break;
+    }
+
+    IEnumerator FadeOut(GameObject fadeObject)
+    {
+        SpriteRenderer sprite = fadeObject.GetComponent<SpriteRenderer>();
+        Color color = sprite.color;
+
+        while (sprite.color.a > 0f)
+        {
+            color.a -= 0.1f;
+            sprite.color = new Color(color.r, color.g, color.b, color.a);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield break;
     }
 }

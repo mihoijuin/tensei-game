@@ -14,6 +14,7 @@ public class BGMDirector : MonoBehaviour {
 
         STAGE = 0,
         GAMEOVER,
+        GOODEND,
 
         NUM
     }
@@ -37,6 +38,11 @@ public class BGMDirector : MonoBehaviour {
         audioSource.Play();
     }
 
+    public void PlayGoodendMusic()
+    {
+        audioSource.clip = audioClips[(int)BGM.GOODEND];
+        audioSource.Play();
+    }
 
     public void StopBGM()
     {
