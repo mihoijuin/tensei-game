@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour {
     // ゴール判定
     public float goalSpeed;
     public GameObject goal;
+    public GameObject goalParticle;
 
     public GameObject background;
 
@@ -309,9 +310,15 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator Goal()
     {
-        goal.SetActive(true);
+        goalParticle.SetActive(true);
+
         SpriteRenderer goalSprite = goal.GetComponent<SpriteRenderer>();
         Color goalColor = goalSprite.color;
+
+        // 初期化
+        goal.SetActive(true);
+        goalSprite.color = new Color(goalColor.r, goalColor.g, goalColor.b, 0f);
+
         StartCoroutine(FeedIn(goalSprite, goalColor));
 
         yield return new WaitWhile(() => goalSprite.color.a < 1f);
@@ -338,6 +345,7 @@ public class PlayerController : MonoBehaviour {
 
         Destroy(background);
         Destroy(goal);
+        Destroy(goalParticle);
 
         yield return new WaitForSeconds(1f);
 
@@ -368,7 +376,7 @@ public class PlayerController : MonoBehaviour {
         {
             color.a += 0.1f;
             sprite.color = new Color(color.r, color.g, color.b, color.a);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
 
         yield break;
